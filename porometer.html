@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capillary Flow Porometer — Luke Leininger</title>
+<meta name="description" content="Design of a capillary flow porometer for measuring tissue pore size.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="top">
+  <a class="logo" href="index.html">LL // Index</a>
+  <a class="back" href="index.html#projects">← Back to projects</a>
+</nav>
+
+<header class="p-hero">
+  <p class="label">DWG. LL-02 — Lab instrumentation / Tissue engineering</p>
+  <h1>Capillary Flow Porometer</h1>
+  <p class="desc">A bench instrument for measuring the <b>average pore size of tissue</b>. Air is pushed through a wetted sample while the device measures <b>flow</b> and <b>differential pressure</b>, and pore diameter is calculated from the pressure needed to clear each pore.</p>
+  <div class="spec-panel">
+    <div class="spec-cell"><div class="spec-label">Lab</div><div class="spec-value">TTEB Lab</div></div>
+    <div class="spec-cell"><div class="spec-label">Role</div><div class="spec-value">Designed the instrument layout and enclosure</div></div>
+    <div class="spec-cell"><div class="spec-label">Stack</div><div class="spec-value">CAD, pneumatics, pressure &amp; flow sensing</div></div>
+    <div class="spec-cell"><div class="spec-label">Status</div><div class="spec-value">Design complete</div></div>
+  </div>
+</header>
+
+<div class="main-image">
+  <div class="fig-frame">
+    <img src="assets/img/tteb-section.jpg" alt="Section view CAD of the porometer: air filter, precision valve, flow meter, differential pressure sensor and sample holder stacked vertically" style="max-height: 640px">
+    <div class="fig-caption"><span>Fig. 01 — Section view of my design</span><span>Air flows top → bottom</span></div>
+  </div>
+</div>
+
+<main class="content">
+  <section class="content-section">
+    <p class="label">01 — System overview</p>
+    <h2>At a Glance</h2>
+    <p>Each component sits on its own shelf in a vertical enclosure, so air passes through them in order before reaching the sample.</p>
+    <div class="chain">
+      <div class="chain-step">Air filter</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Precision valve</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Flow meter</div><div class="chain-arrow">→</div>
+      <div class="chain-step">ΔP sensor</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Sample holder</div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">02 — Physics</p>
+    <h2>From Pressure to Pore Size</h2>
+    <p>The sample is soaked in a wetting liquid: isopropyl alcohol at first, and eventually Galwick. Liquid only leaves a pore once the gas pressure overcomes its surface tension, so the pressure at which each pore opens gives its diameter:</p>
+    <div class="math-block">P · d = 4 γ cos θ</div>
+    <p>Here <i>P</i> is the differential gas pressure, <i>d</i> is the pore diameter, <i>γ</i> is the liquid's surface tension, and <i>θ</i> is the contact angle between the liquid and the sample.</p>
+    <div class="cap-grid">
+      <div class="cap-cell"><h3>Bubble point</h3><p>Where wet flow first lifts off zero. This is the largest pore.</p></div>
+      <div class="cap-cell"><h3>Smallest pore</h3><p>Where the wet curve finally merges into the dry curve and every pore is open.</p></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">03 — Build &amp; lab work</p>
+    <h2>Enclosure &amp; Samples</h2>
+    <p>Besides the porometer, I worked with the lab's electrospinner, ran biaxial material testing, and dissected tissue to prepare samples.</p>
+    <div class="media-grid">
+      <div class="media-item"><div class="media-frame"><img src="assets/img/tteb-layout.jpg" alt="Front view of the enclosure with cutouts for each component" loading="lazy"></div><div class="media-caption">Fig. 02 — Enclosure with component mounts</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/tteb-dissection.jpg" alt="Gloved hands dissecting tissue on a cutting mat" loading="lazy" style="object-fit: cover"></div><div class="media-caption">Fig. 03 — Preparing tissue samples</div></div>
+    </div>
+    <div class="links-row">
+      <a class="btn btn-ghost" href="index.html#projects">← All projects</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Rev. 2026.10 · Duke University</span>
+  <span>© 2026 Luke Leininger</span>
+</footer>
+
+<dialog id="lightbox"><img alt=""><p></p><button type="button" aria-label="Close">×</button></dialog>
+<script src="script.js"></script>
+</body>
+</html>

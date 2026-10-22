@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Luke Leininger — Engineering Projects</title>
+<title>Luke Leininger — Portfolio</title>
 <meta name="description" content="Engineering projects by Luke Leininger, biomedical engineering student at Duke University: medical devices, lab instrumentation and competition robotics.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,250 +12,105 @@
 </head>
 <body>
 
-<header class="topbar">
-  <a class="mark" href="#top">L. LEININGER <span>/ engineering</span></a>
-  <nav>
-    <a href="#projects">Projects</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-  </nav>
-</header>
+<nav class="top">
+  <a class="logo" href="#top">LL // Index</a>
+  <ul>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
 
-<main id="top">
-
-<section class="hero wrap">
-  <p class="eyebrow">Biomedical Engineering · Duke University</p>
-  <h1>I design, wire, and test things <em>until they work.</em></h1>
-  <p class="lede">I'm Luke Leininger, a biomedical engineering student at Duke. This is a record of what I've built so far — a medication-reminder device, a lab instrument for measuring tissue porosity, and four seasons of competition robots.</p>
-  <dl class="hero-stats">
-    <div><dt>Projects</dt><dd>5</dd></div>
-    <div><dt>Years building robots</dt><dd>4</dd></div>
-    <div><dt>Tools</dt><dd class="small">Onshape · Fusion 360 · Raspberry Pi · Python · Java · C++</dd></div>
-  </dl>
-</section>
-
-<section id="projects" class="wrap index">
-  <h2 class="section-label">Project index</h2>
-  <ol class="index-list">
-    <li><a href="#adhd"><span class="n">01</span><span class="t">ADHD Medication Reminder System</span><span class="c">Duke EGR 101</span><span class="y">2025</span></a></li>
-    <li><a href="#medesign"><span class="n">02</span><span class="t">Low-Cost Endoscopy Anchor</span><span class="c">Duke MEDesign</span><span class="y">2025–</span></a></li>
-    <li><a href="#porometer"><span class="n">03</span><span class="t">Capillary Flow Porometer</span><span class="c">TTEB Lab</span><span class="y">—</span></a></li>
-    <li><a href="#into-the-deep"><span class="n">04</span><span class="t">FTC Robot: <i>Into the Deep</i></span><span class="c">Team 516 Gears of Fire</span><span class="y">2024–25</span></a></li>
-    <li><a href="#centerstage"><span class="n">05</span><span class="t">FTC Robot: <i>CenterStage</i></span><span class="c">Team 516 Gears of Fire</span><span class="y">2023–24</span></a></li>
-  </ol>
-</section>
-
-<!-- 01 ADHD -->
-<article id="adhd" class="project wrap">
-  <header class="p-head">
-    <span class="p-num">01</span>
-    <div>
-      <p class="eyebrow">Medical device · Duke EGR 101 · Fall 2025</p>
-      <h2>Low-Cost ADHD Medication Reminder System</h2>
-      <p class="p-sum">A portable, 3D-printed pill station that reminds adults with ADHD to take their medication with lights, sound and an LCD — and logs every dose to a companion website.</p>
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <span class="hero-eyebrow">Sheet 01 / 03 — Title block</span>
+    <h1>Luke Leininger<em>Biomedical Engineering</em></h1>
+    <p class="hero-bio">I'm a student at <b>Duke University</b> studying <b>Biomedical Engineering</b>. I like the part of engineering where hardware meets people — <b>medical devices</b>, <b>lab instruments</b> and <b>robots</b> that have to work for real users on a real budget. I CAD in Onshape and Fusion 360, wire with Raspberry Pi, and code in Python, Java and C++.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#projects">View projects →</a>
+      <a class="btn btn-ghost" href="#contact">Contact ↴</a>
     </div>
-  </header>
-
-  <div class="p-body">
-    <dl class="spec">
-      <div><dt>My role</dt><dd>Electronics — soldered and assembled all electrical components (Raspberry Pi, LCD, LEDs, buttons, buzzers)</dd></div>
-      <div><dt>Team</dt><dd>L. Leininger, E. Samborski, A. Gupta, A. Misra, A. Kathapurkar</dd></div>
-      <div><dt>Users</dt><dd>Adult women with ADHD, with three project clients</dd></div>
-      <div><dt>Stack</dt><dd>Raspberry Pi · Flask · PLA / TPU printing · Li-ion power</dd></div>
-    </dl>
-    <div class="prose">
-      <h3>The problem</h3>
-      <p>ADHD makes routine tasks like taking medication on schedule hard, and both missed and doubled doses carry real costs — the latter including raised blood pressure and cardiovascular strain. Women are often diagnosed later in life and are juggling jobs and families, which makes a new medication routine even harder to keep.</p>
-      <h3>What we built</h3>
-      <p>A hexagonal housing holds up to five pill bottles, each retained by a flexible TPU cap and paired with a button and LED. Pressing the button logs the dose; the LCD shows what's been taken and when the next dose is due. A Raspberry Pi hosts a Flask web app for scheduling alarms and tracking refills remotely, and onboard batteries make it portable.</p>
-    </div>
-  </div>
-
-  <div class="gallery g4">
-    <figure><img src="assets/img/adhd-cad.jpg" alt="Exploded CAD of the reminder device showing lid with LCD, pill holders and battery base" loading="lazy"><figcaption>Fig. 1 — Exploded CAD of the final design</figcaption></figure>
-    <figure><img src="assets/img/adhd-prototype.jpg" alt="Printed prototype of the device in purple and pink PLA with LCD screen on top" loading="lazy"><figcaption>Fig. 2 — Printed prototype</figcaption></figure>
-    <figure><img src="assets/img/adhd-schematic.jpg" alt="Wiring schematic connecting Raspberry Pi to LCD, buttons, LEDs and buzzers" loading="lazy"><figcaption>Fig. 3 — Wiring schematic for the Raspberry Pi</figcaption></figure>
-    <figure><img src="assets/img/adhd-web.jpg" alt="Screenshot of the companion web app's alarm scheduler" loading="lazy"><figcaption>Fig. 4 — Companion website for alarm scheduling</figcaption></figure>
-  </div>
-
-  <h3 class="table-title">Verification testing — all criteria passed</h3>
-  <div class="table-scroll">
-  <table class="tests">
-    <thead><tr><th>Criterion</th><th>Test</th><th>Target</th><th>Result</th></tr></thead>
-    <tbody>
-      <tr><td>Reminder effectiveness</td><td>22 users rated alerts at distances up to 15 m</td><td>≥ 3 / 5</td><td class="pass">4.36 / 5</td></tr>
-      <tr><td>Pill-logging reliability</td><td>Each of 5 buttons pressed 100×, LCD checked</td><td>≥ 95%</td><td class="pass">95–98%</td></tr>
-      <tr><td>Wireless range</td><td>Settings changed from phone at increasing distance</td><td>≥ 10 m Wi-Fi, ≥ 5 m hotspot</td><td class="pass">13 m / 8 m</td></tr>
-      <tr><td>Bottle retention</td><td>2 bottle sizes inserted &amp; removed 25× per slot</td><td>Cap intact</td><td class="pass">All 5 slots</td></tr>
-      <tr><td>App usability</td><td>12 users rated ease of use</td><td>≥ 4 / 5</td><td class="pass">4.25 / 5</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p class="note"><b>Next:</b> swap the buzzer for a speaker so users can customize sounds, and link multiple devices for households.</p>
-</article>
-
-<!-- 02 MEDesign -->
-<article id="medesign" class="project wrap compact">
-  <header class="p-head">
-    <span class="p-num">02</span>
-    <div>
-      <p class="eyebrow">Medical device · Duke MEDesign · Sep 2025 – present <span class="tag-live">In progress</span></p>
-      <h2>Low-Cost Endoscopy Anchor</h2>
-      <p class="p-sum">Designing an affordable alternative to commercial endoscopy anchors for use in low-income communities and low-resource health systems, modeled in Onshape.</p>
-    </div>
-  </header>
-</article>
-
-<!-- 03 Porometer -->
-<article id="porometer" class="project wrap">
-  <header class="p-head">
-    <span class="p-num">03</span>
-    <div>
-      <p class="eyebrow">Lab instrumentation · TTEB Lab</p>
-      <h2>Capillary Flow Porometer</h2>
-      <p class="p-sum">A bench instrument I designed to measure the pore size of tissue samples by pushing air through them and watching how flow responds to pressure.</p>
-    </div>
-  </header>
-
-  <div class="p-body">
-    <dl class="spec">
-      <div><dt>My role</dt><dd>Designed the instrument layout and enclosure in CAD</dd></div>
-      <div><dt>Components</dt><dd>Air filter · precision valve · flow meter · differential pressure sensor · sample holder</dd></div>
-      <div><dt>Also in lab</dt><dd>Electrospinning · biaxial material testing · tissue dissection</dd></div>
-    </dl>
-    <div class="prose">
-      <h3>How it works</h3>
-      <p>The sample is first soaked in a wetting liquid. Air then flows through a filter and precision valve, past a flow meter, and into the sample while a differential pressure sensor reads the pressure drop. Liquid clears from a pore once the pressure overcomes its surface tension, so pore diameter falls out of the Washburn relation:</p>
-      <p class="eq">P · d = 4 γ cos θ</p>
-      <p>Comparing the wet and dry flow curves gives the full pore distribution: the <b>bubble point</b>, where wet flow first lifts off zero, marks the largest pore, and the point where the wet curve merges into the dry curve marks the smallest.</p>
-    </div>
-  </div>
-
-  <div class="gallery g3">
-    <figure><img src="assets/img/tteb-section.jpg" alt="Section view CAD of the porometer stack: filter, valve, flow meter, pressure sensor, sample holder" loading="lazy"><figcaption>Fig. 1 — Section view: filter → valve → flow meter → ΔP sensor → sample</figcaption></figure>
-    <figure><img src="assets/img/tteb-layout.jpg" alt="Front view of the porometer enclosure with component cutouts" loading="lazy"><figcaption>Fig. 2 — Enclosure with component mounts</figcaption></figure>
-    <figure><img src="assets/img/tteb-dissection.jpg" alt="Gloved hands dissecting tissue on a cutting mat" loading="lazy"><figcaption>Fig. 3 — Preparing tissue samples</figcaption></figure>
-  </div>
-</article>
-
-<!-- 04 Into the Deep -->
-<article id="into-the-deep" class="project wrap">
-  <header class="p-head">
-    <span class="p-num">04</span>
-    <div>
-      <p class="eyebrow">Competition robotics · FIRST Tech Challenge · 2024–25</p>
-      <h2>Custom Robot for <i>Into the Deep</i></h2>
-      <p class="p-sum">Our team's first fully custom robot: an 18" belt-driven mecanum chassis with four-stage vertical slides, twin horizontal slides, a 360° claw and a worm-gear hang.</p>
-    </div>
-  </header>
-
-  <div class="p-body">
-    <dl class="spec">
-      <div><dt>My role</dt><dd>Head of CAD (4th year on the team)</dd></div>
-      <div><dt>Team</dt><dd>516 Gears of Fire, Palm Harbor University HS — 17 members</dd></div>
-      <div><dt>Tools</dt><dd>Fusion 360 · AutoCAD · 3D printing · Java · RoadRunner</dd></div>
-    </dl>
-    <div class="prose">
-      <h3>Design &amp; iteration</h3>
-      <p>The robot went through three major iterations across the season. We cut custom 6061 aluminum side plates, then recut them from ¼" to ⅛" to drop weight, made them taller to fit a hang mechanism, and added a fourth vertical slide stage to reach the high basket. Belt lengths for the HTD5 drive were calculated from pulley geometry, and lift mounts were checked with Fusion 360 structural analysis.</p>
-      <p>The claw evolved from a single-angle gripper into a 3-step, 4-servo subsystem that rotates to match a sample's orientation anywhere on the field and spans both horizontal slides for stability. When the single-motor hang failed at League Championships, we rebuilt it with a motor on each side.</p>
-      <h3>Software</h3>
-      <p>Autonomous runs on two dead-wheel odometry pods fused with a Pinpoint IMU, tuned in RoadRunner with PID control. Teleop added set positions, a "pecking" pickup routine, an arctan-curve slow mode, and a correction algorithm that keeps the horizontal slides level as the lift rises.</p>
-    </div>
-  </div>
-
-  <div class="gallery g4">
-    <figure><img src="assets/img/itd-sketch.jpg" alt="Hand sketch of the initial robot design" loading="lazy"><figcaption>Fig. 1 — Initial robot sketch</figcaption></figure>
-    <figure><img src="assets/img/itd-drivetrain-cad.jpg" alt="Top view CAD of the custom drivetrain" loading="lazy"><figcaption>Fig. 2 — Drivetrain CAD, top</figcaption></figure>
-    <figure><img src="assets/img/itd-drivetrain-iso.jpg" alt="Isometric CAD of the custom drivetrain" loading="lazy"><figcaption>Fig. 3 — Drivetrain CAD, isometric</figcaption></figure>
-    <figure><img src="assets/img/itd-claw-cad.jpg" alt="CAD model of the claw slide connector" loading="lazy"><figcaption>Fig. 4 — Claw connector CAD</figcaption></figure>
-    <figure><img src="assets/img/itd-claw.jpg" alt="Built claw assembly on a workbench" loading="lazy"><figcaption>Fig. 5 — Claw assembly</figcaption></figure>
-    <figure><img src="assets/img/itd-build.jpg" alt="Robot during build with slides and wiring" loading="lazy"><figcaption>Fig. 6 — Mid-build</figcaption></figure>
-    <figure><img src="assets/img/itd-robot.jpg" alt="Finished robot with vertical slides extended" loading="lazy"><figcaption>Fig. 7 — Slides at full extension</figcaption></figure>
-    <figure><img src="assets/img/itd-paths.jpg" alt="Field diagram of autonomous paths" loading="lazy"><figcaption>Fig. 8 — Autonomous paths</figcaption></figure>
-  </div>
-</article>
-
-<!-- 05 CenterStage -->
-<article id="centerstage" class="project wrap">
-  <header class="p-head">
-    <span class="p-num">05</span>
-    <div>
-      <p class="eyebrow">Competition robotics · FIRST Tech Challenge · 2023–24</p>
-      <h2>Robot for <i>CenterStage</i></h2>
-      <p class="p-sum">A fast-cycling robot with a 3D-printed sensing claw, worm-gear hang and drone launcher that set a temporary Florida state record of 267 points, on a season that ended at the FIRST World Championship.</p>
-    </div>
-  </header>
-
-  <div class="p-body">
-    <dl class="spec">
-      <div><dt>My role</dt><dd>Team member; led writing of the team's engineering portfolio</dd></div>
-      <div><dt>Team</dt><dd>516 Gears of Fire — 12 members</dd></div>
-      <div><dt>Result</dt><dd>Temporary state record of 267 points; qualified for Worlds</dd></div>
-    </dl>
-    <div class="prose">
-      <h3>Design highlights</h3>
-      <ul>
-        <li><b>Drivetrain:</b> custom aluminum side plates with 3D-printed pulleys and HTD5 belts at a 13.7:1 ratio, lengthened to 16.25" to fit the arm motor and odometry pods.</li>
-        <li><b>Arm &amp; hang:</b> a 28:1 worm gear sized from a torque calculation lets the robot lift itself; a second rail fixed uneven claw travel.</li>
-        <li><b>Claw:</b> 3D-printed, 100%-infill pincers with time-of-flight color sensors that auto-close when a pixel is detected.</li>
-        <li><b>Vision &amp; autonomous:</b> an OpenCV pipeline finds the team element and estimates distance from the camera's focal length; AprilTags, odometry and ultrasonic sensors correct position to within 0.1–0.3".</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="gallery g4">
-    <figure><img src="assets/img/cs-robot.jpg" alt="Competition robot with sponsor backplate and LED strip" loading="lazy"><figcaption>Fig. 1 — Competition robot with sponsor backplate</figcaption></figure>
-    <figure><img src="assets/img/cs-cad-1.jpg" alt="Rendered CAD of the full robot" loading="lazy"><figcaption>Fig. 2 — Full robot CAD</figcaption></figure>
-    <figure><img src="assets/img/cs-drivetrain-cad.jpg" alt="Top view CAD of the drivetrain" loading="lazy"><figcaption>Fig. 3 — Drivetrain CAD</figcaption></figure>
-    <figure><img src="assets/img/cs-claw-cad.jpg" alt="CAD of the 3D-printed claw" loading="lazy"><figcaption>Fig. 4 — Claw CAD</figcaption></figure>
-    <figure><img src="assets/img/cs-claw.jpg" alt="Printed claw mounted to the robot" loading="lazy"><figcaption>Fig. 5 — Printed claw on the robot</figcaption></figure>
-    <figure><img src="assets/img/cs-arm.jpg" alt="Arm and hanging mechanism" loading="lazy"><figcaption>Fig. 6 — Arm and hang mechanism</figcaption></figure>
-    <figure><img src="assets/img/cs-mecanum.jpg" alt="Diagram of mecanum wheel force vectors" loading="lazy"><figcaption>Fig. 7 — Mecanum drive vectors</figcaption></figure>
-    <figure><img src="assets/img/cs-opencv.jpg" alt="Camera feed detecting the red team element" loading="lazy"><figcaption>Fig. 8 — OpenCV team-element detection</figcaption></figure>
-  </div>
-</article>
-
-<section id="about" class="wrap about">
-  <h2 class="section-label">About</h2>
-  <div class="about-grid">
-    <div class="prose">
-      <p>I'm a B.S. student in Biomedical Engineering at Duke. I like the parts of engineering where hardware meets people — devices that have to survive real users and real constraints like cost.</p>
-      <p>Outside of projects I've done research in the Hickey Lab, studying regulatory elements of endometrial receptivity with single-cell RNA-seq data; interned at BPI Labs across R&amp;D (HPLC), QA and pharmaceutical distribution; and ran the STEM program for Silverline, an international education nonprofit.</p>
-      <p>On campus I'm part of MEDesign, Enable, and Duke Motorsports.</p>
-    </div>
-    <dl class="spec">
-      <div><dt>CAD</dt><dd>Onshape · Fusion 360</dd></div>
-      <div><dt>Fabrication</dt><dd>3D printing (PLA, TPU) · soldering</dd></div>
-      <div><dt>Electronics</dt><dd>Raspberry Pi · sensors · motor &amp; servo control</dd></div>
-      <div><dt>Code</dt><dd>Python · Java · C++</dd></div>
-      <div><dt>Languages</dt><dd>English · Spanish (intermediate)</dd></div>
-    </dl>
   </div>
 </section>
 
-<section id="contact" class="wrap contact">
-  <h2>Let's build something.</h2>
-  <p><a class="btn" href="mailto:luke.leininger@duke.edu">luke.leininger@duke.edu</a></p>
+<section class="section" id="projects">
+  <p class="label">Sheet 02 / 03 — Project drawings</p>
+  <h2 class="section-title">Featured Projects</h2>
+
+  <div class="grid">
+    <article class="card">
+      <span class="dwg">DWG. LL-01</span>
+      <a class="card-img contain" href="adhd.html"><img src="assets/img/adhd-cad.jpg" alt="Exploded CAD of the ADHD medication reminder device"></a>
+      <div class="card-body">
+        <div class="tags"><span class="tag">Raspberry Pi</span><span class="tag">Flask</span><span class="tag">3D printing</span></div>
+        <h3>ADHD Medication Reminder System</h3>
+        <p>A portable pill station that reminds adults with ADHD to take their medication with lights, sound and an LCD, and logs each dose to a companion website.</p>
+        <a class="card-link" href="adhd.html">↗ View project</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="dwg">DWG. LL-02</span>
+      <a class="card-img contain" href="porometer.html"><img src="assets/img/tteb-section.jpg" alt="Section-view CAD of the capillary flow porometer"></a>
+      <div class="card-body">
+        <div class="tags"><span class="tag">CAD</span><span class="tag">Instrumentation</span><span class="tag">Tissue</span></div>
+        <h3>Capillary Flow Porometer</h3>
+        <p>A bench instrument that measures the pore size of tissue samples by pushing air through them and tracking how flow responds to pressure.</p>
+        <a class="card-link" href="porometer.html">↗ View project</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="dwg">DWG. LL-03</span>
+      <div class="card-img placeholder">In progress</div>
+      <div class="card-body">
+        <div class="tags"><span class="tag">Onshape</span><span class="tag">Medical device</span><span class="tag">Global health</span></div>
+        <h3>Low-Cost Endoscopy Anchor</h3>
+        <p>With Duke MEDesign: designing an affordable alternative to commercial endoscopy anchors for low-income communities and low-resource health systems.</p>
+        <span class="card-link muted">Sep 2025 – present</span>
+      </div>
+    </article>
+  </div>
+
+  <div class="appendix">
+    <p class="label">Appendix — Earlier work</p>
+    <h3>High School Robotics</h3>
+    <p>Four seasons on FIRST Tech Challenge Team 516 Gears of Fire, finishing as Head of CAD. This is where I learned to design, build, break and rebuild things.</p>
+    <div class="grid small">
+      <article class="card">
+        <span class="dwg">DWG. HS-01</span>
+        <a class="card-img" href="into-the-deep.html"><img src="assets/img/itd-robot.jpg" alt="Into the Deep robot with slides extended" style="object-position: center 30%"></a>
+        <div class="card-body">
+          <div class="tags"><span class="tag">Fusion 360</span><span class="tag">Java</span><span class="tag">RoadRunner</span></div>
+          <h3>Custom Robot: <i>Into the Deep</i></h3>
+          <p>2024–25. Our first fully custom robot, with four-stage slides, a 360° claw and a worm-gear hang. I was Head of CAD.</p>
+          <a class="card-link" href="into-the-deep.html">↗ View project</a>
+        </div>
+      </article>
+      <article class="card">
+        <span class="dwg">DWG. HS-02</span>
+        <a class="card-img" href="centerstage.html"><img src="assets/img/cs-robot.jpg" alt="CenterStage competition robot"></a>
+        <div class="card-body">
+          <div class="tags"><span class="tag">OpenCV</span><span class="tag">3D printing</span><span class="tag">Odometry</span></div>
+          <h3>Robot: <i>CenterStage</i></h3>
+          <p>2023–24. A fast-cycling robot that set a temporary Florida state record of 267 points and reached the FIRST World Championship.</p>
+          <a class="card-link" href="centerstage.html">↗ View project</a>
+        </div>
+      </article>
+    </div>
+  </div>
 </section>
 
-</main>
+<section class="contact" id="contact">
+  <p class="label">Sheet 03 / 03 — Contact</p>
+  <h2 class="section-title">Get In Touch</h2>
+  <p>I'm looking for research and internship opportunities in biomedical engineering. If you have a question or just want to say hi, my inbox is open.</p>
+  <a class="btn btn-primary" href="mailto:luke.leininger@duke.edu">Say hello →</a>
+</section>
 
-<footer class="wrap foot">© Luke Leininger</footer>
+<footer>
+  <span>Rev. 2026.10 · Duke University</span>
+  <span>© 2026 Luke Leininger</span>
+</footer>
 
-<dialog id="lightbox"><img alt=""><p></p><button type="button" aria-label="Close">×</button></dialog>
-
-<script>
-  const box = document.getElementById('lightbox');
-  document.querySelectorAll('.gallery img').forEach(img => {
-    img.addEventListener('click', () => {
-      box.querySelector('img').src = img.src;
-      box.querySelector('img').alt = img.alt;
-      box.querySelector('p').textContent = img.nextElementSibling ? img.nextElementSibling.textContent : '';
-      box.showModal();
-    });
-  });
-  box.addEventListener('click', e => { if (e.target === box || e.target.tagName === 'BUTTON') box.close(); });
-</script>
 </body>
 </html>

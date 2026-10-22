@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FTC Into the Deep Robot — Luke Leininger</title>
+<meta name="description" content="Custom FIRST Tech Challenge robot for the 2024–25 Into the Deep season, Team 516 Gears of Fire.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="top">
+  <a class="logo" href="index.html">LL // Index</a>
+  <a class="back" href="index.html#projects">← Back to projects</a>
+</nav>
+
+<header class="p-hero">
+  <p class="label">DWG. HS-01 — Competition robotics / FIRST Tech Challenge</p>
+  <h1>Custom Robot: <i>Into the Deep</i></h1>
+  <p class="desc">Team 516's first <b>fully custom robot</b>: an 18" belt-driven mecanum chassis with <b>four-stage vertical slides</b>, twin horizontal slides, a <b>360° claw</b> and a worm-gear hang, refined over three major iterations in one season.</p>
+  <div class="spec-panel">
+    <div class="spec-cell"><div class="spec-label">Timeline</div><div class="spec-value">2024–25 season</div></div>
+    <div class="spec-cell"><div class="spec-label">Role</div><div class="spec-value">Head of CAD (4th year on the team)</div></div>
+    <div class="spec-cell"><div class="spec-label">Stack</div><div class="spec-value">Fusion 360, 3D printing, Java, RoadRunner</div></div>
+    <div class="spec-cell"><div class="spec-label">Team</div><div class="spec-value">516 Gears of Fire, 17 members</div></div>
+  </div>
+</header>
+
+<div class="main-image">
+  <div class="fig-frame">
+    <img src="assets/img/itd-drivetrain-iso.jpg" alt="Isometric CAD of the custom drivetrain and slide mounts">
+    <div class="fig-caption"><span>Fig. 01 — Custom drivetrain CAD</span><span>⅛" 6061 aluminum side plates</span></div>
+  </div>
+</div>
+
+<main class="content">
+  <section class="content-section">
+    <p class="label">01 — Strategy</p>
+    <h2>Designing for the Game</h2>
+    <p>Our goal was a robot that could win the league championship by scoring 8+ specimens per match. Since maneuverability mattered less this season, we went with a large 18" chassis, prioritized reach with two sets of slides, and chose a level 2 ascent. The extra 15 points for level 3 weren't worth the cycling time we'd lose.</p>
+    <div class="media-grid">
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-sketch.jpg" alt="Hand sketch of the initial robot design" loading="lazy"></div><div class="media-caption">Fig. 02 — Initial robot sketch</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-drivetrain-cad.jpg" alt="Top-view CAD of the drivetrain" loading="lazy"></div><div class="media-caption">Fig. 03 — Drivetrain CAD, top view</div></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">02 — Iteration</p>
+    <h2>Three Robots in One Season</h2>
+    <ul>
+      <li><b>Iteration 1 (Meet 1):</b> a mini drivetrain with a single jointed arm that could only reach the low basket. We built it as a stand-in while the custom robot was finished.</li>
+      <li><b>Iteration 2 (Meet 2):</b> the custom chassis. Its ¼" side plates were too heavy, there was no room for a hang, and the slides didn't have enough stages.</li>
+      <li><b>Iteration 3 (Meet 3 → States):</b> plates recut to ⅛" and made taller, a fourth vertical slide stage added, Axon servos for the heavier joint, and a hang rebuilt with a motor on each side after the single-motor version broke at League Championships.</li>
+    </ul>
+    <div class="cap-grid">
+      <div class="cap-cell"><h3>Drivetrain</h3><p>1:1 belt drive on 3D-printed pulleys, with HTD5 belt lengths calculated from pulley geometry. 435 RPM motors and a slot for belt tensioning.</p></div>
+      <div class="cap-cell"><h3>Structure</h3><p>Custom 6061 aluminum side plates, with lift mounts checked using Fusion 360 structural analysis.</p></div>
+      <div class="cap-cell"><h3>Claw</h3><p>A 3-step, 4-servo subsystem that rotates to match a sample's angle anywhere on the field and spans both horizontal slides for stability.</p></div>
+      <div class="cap-cell"><h3>Hang</h3><p>Worm gear and axle for torque, with two motors so the robot lifts evenly.</p></div>
+    </div>
+    <div class="media-grid three">
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-claw-cad.jpg" alt="CAD of the claw slide connector" loading="lazy"></div><div class="media-caption">Fig. 04 — Claw connector CAD</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-claw.jpg" alt="Assembled claw on a workbench" loading="lazy"></div><div class="media-caption">Fig. 05 — Claw assembly</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-build.jpg" alt="Robot mid-build with slides and wiring" loading="lazy"></div><div class="media-caption">Fig. 06 — Mid-build</div></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">03 — Software</p>
+    <h2>Autonomous &amp; Driver Control</h2>
+    <p>Autonomous uses two sprung dead-wheel odometry pods fused with a Pinpoint IMU, which updates the robot's position every 0.65 ms. It's tuned in RoadRunner with PID control and scores 43 points from either the basket or the rung.</p>
+    <p>In teleop, set positions move the slides and claw to scoring spots with one button. A "pecking" routine retries missed grabs quickly, and the slow mode follows the curve below for fine control. A correction algorithm also keeps the horizontal slides level as the lift rises.</p>
+    <div class="math-block">speed = arctan(5x) / arctan(5)</div>
+    <div class="media-grid">
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-paths.jpg" alt="Field diagram of autonomous paths" loading="lazy"></div><div class="media-caption">Fig. 07 — Autonomous paths</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-robot.jpg" alt="Robot with vertical slides extended" loading="lazy"></div><div class="media-caption">Fig. 08 — Slides at full extension</div></div>
+    </div>
+    <div class="links-row">
+      <a class="btn btn-primary" href="centerstage.html">Previous season →</a>
+      <a class="btn btn-ghost" href="index.html#projects">← All projects</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Rev. 2026.10 · Duke University</span>
+  <span>© 2026 Luke Leininger</span>
+</footer>
+
+<dialog id="lightbox"><img alt=""><p></p><button type="button" aria-label="Close">×</button></dialog>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FTC CenterStage Robot — Luke Leininger</title>
+<meta name="description" content="FIRST Tech Challenge robot for the 2023–24 CenterStage season, Team 516 Gears of Fire.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="top">
+  <a class="logo" href="index.html">LL // Index</a>
+  <a class="back" href="index.html#projects">← Back to projects</a>
+</nav>
+
+<header class="p-hero">
+  <p class="label">DWG. HS-02 — Competition robotics / FIRST Tech Challenge</p>
+  <h1>Robot: <i>CenterStage</i></h1>
+  <p class="desc">A fast-cycling robot with a <b>3D-printed sensing claw</b>, worm-gear hang and drone launcher. It set a <b>temporary Florida state record of 267 points</b>, and the season ended at the <b>FIRST World Championship</b>.</p>
+  <div class="spec-panel">
+    <div class="spec-cell"><div class="spec-label">Timeline</div><div class="spec-value">2023–24 season</div></div>
+    <div class="spec-cell"><div class="spec-label">Role</div><div class="spec-value">Team member; led the engineering portfolio</div></div>
+    <div class="spec-cell"><div class="spec-label">Stack</div><div class="spec-value">CAD, 3D printing, Java, OpenCV, RoadRunner</div></div>
+    <div class="spec-cell"><div class="spec-label">Result</div><div class="spec-value">267-pt state record; qualified for Worlds</div></div>
+  </div>
+</header>
+
+<div class="main-image">
+  <div class="fig-frame">
+    <img src="assets/img/cs-robot.jpg" alt="Competition robot with sponsor backplate and RGB light strip">
+    <div class="fig-caption"><span>Fig. 01 — Competition robot</span><span>Sponsor backplate + RGB strip</span></div>
+  </div>
+</div>
+
+<main class="content">
+  <section class="content-section">
+    <p class="label">01 — Hardware</p>
+    <h2>Design Highlights</h2>
+    <div class="cap-grid">
+      <div class="cap-cell"><h3>Drivetrain</h3><p>Custom aluminum side plates with 3D-printed pulleys and HTD5 belts at 13.7:1, lengthened to 16.25" to fit the arm motor and odometry pods.</p></div>
+      <div class="cap-cell"><h3>Arm &amp; hang</h3><p>A 28:1 worm gear sized from a torque calculation lets the robot lift itself. A second rail fixed uneven claw travel.</p></div>
+      <div class="cap-cell"><h3>Claw</h3><p>3D-printed pincers at 100% infill, with time-of-flight color sensors that auto-close the claw when a pixel is detected.</p></div>
+      <div class="cap-cell"><h3>Lift extender</h3><p>A 5-joint mechanism (1 motor, 4 servos) that matches the backdrop angle, automated to 6 set positions.</p></div>
+    </div>
+    <div class="media-grid three">
+      <div class="media-item"><div class="media-frame"><img src="assets/img/cs-cad-1.jpg" alt="Rendered CAD of the full robot" loading="lazy"></div><div class="media-caption">Fig. 02 — Full robot CAD</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/cs-drivetrain-cad.jpg" alt="Top-view CAD of the drivetrain" loading="lazy"></div><div class="media-caption">Fig. 03 — Drivetrain CAD</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/cs-arm.jpg" alt="Arm and hanging mechanism" loading="lazy"></div><div class="media-caption">Fig. 04 — Arm and hang</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/cs-claw-cad.jpg" alt="CAD of the 3D-printed claw" loading="lazy"></div><div class="media-caption">Fig. 05 — Claw CAD</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/cs-claw.jpg" alt="Printed claw on the robot" loading="lazy"></div><div class="media-caption">Fig. 06 — Printed claw</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/cs-mecanum.jpg" alt="Mecanum wheel force vector diagram" loading="lazy"></div><div class="media-caption">Fig. 07 — Mecanum drive vectors</div></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">02 — Vision</p>
+    <h2>Finding the Team Element</h2>
+    <p>An OpenCV pipeline finds the largest red object in the camera frame, draws a bounding box around it, and reports its centroid. It estimates distance from the camera's focal length, which we calibrated by placing the element at a known distance:</p>
+    <div class="math-block">distance = (real width × focal length) / width in pixels</div>
+    <p>One problem we hit: OpenCV and AprilTag detection each created their own camera object, so AprilTags stopped scanning. The fix was to run the OpenCV pipeline during initialization, close it, and then hand the same camera to the AprilTag pipeline.</p>
+    <div class="media-grid">
+      <div class="media-item"><div class="media-frame"><img src="assets/img/cs-opencv.jpg" alt="Camera feed detecting the red team element" loading="lazy"></div><div class="media-caption">Fig. 08 — Team-element detection</div></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">03 — Autonomous</p>
+    <h2>Correcting Drift</h2>
+    <ul>
+      <li><b>Problem:</b> encoder-only movement slid when strafing and built up error over long distances, especially on the far side of the field.</li>
+      <li><b>Fix 1:</b> three-pod dead-wheel odometry with RoadRunner trajectories.</li>
+      <li><b>Fix 2:</b> AprilTags and four ultrasonic sensors reset RoadRunner's position at each pickup. A linear-regression correction brought heading and distance to within 0.1–0.3".</li>
+    </ul>
+    <div class="links-row">
+      <a class="btn btn-primary" href="into-the-deep.html">Next season →</a>
+      <a class="btn btn-ghost" href="index.html#projects">← All projects</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Rev. 2026.10 · Duke University</span>
+  <span>© 2026 Luke Leininger</span>
+</footer>
+
+<dialog id="lightbox"><img alt=""><p></p><button type="button" aria-label="Close">×</button></dialog>
+<script src="script.js"></script>
+</body>
+</html>

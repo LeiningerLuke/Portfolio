@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADHD Medication Reminder System — Luke Leininger</title>
+<meta name="description" content="A low-cost, portable medication reminder device for adults with ADHD, built for Duke EGR 101.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="top">
+  <a class="logo" href="index.html">LL // Index</a>
+  <a class="back" href="index.html#projects">← Back to projects</a>
+</nav>
+
+<header class="p-hero">
+  <p class="label">DWG. LL-01 — Medical device / Embedded systems</p>
+  <h1>ADHD Medication Reminder System</h1>
+  <p class="desc">A low-cost, portable pill station for <b>adult women with ADHD</b>. It holds up to five pill bottles, alerts the user with <b>light and sound</b> when a dose is due, and logs every dose to a <b>companion website</b> for scheduling and refill tracking.</p>
+  <div class="spec-panel">
+    <div class="spec-cell"><div class="spec-label">Timeline</div><div class="spec-value">Fall 2025 · Duke EGR 101</div></div>
+    <div class="spec-cell"><div class="spec-label">Role</div><div class="spec-value">Electronics — soldered and assembled all electrical components</div></div>
+    <div class="spec-cell"><div class="spec-label">Stack</div><div class="spec-value">Raspberry Pi, Flask, PLA / TPU printing</div></div>
+    <div class="spec-cell"><div class="spec-label">Status</div><div class="spec-value">Completed; all 5 design tests passed</div></div>
+  </div>
+</header>
+
+<div class="main-image">
+  <div class="fig-frame">
+    <img src="assets/img/adhd-cad.jpg" alt="Exploded CAD of the reminder device: LCD lid, pill holders with retention caps, and battery base">
+    <div class="fig-caption"><span>Fig. 01 — Exploded CAD of the final design</span><span>Five-bottle housing</span></div>
+  </div>
+</div>
+
+<main class="content">
+  <section class="content-section">
+    <p class="label">01 — Problem</p>
+    <h2>Why It Matters</h2>
+    <p>ADHD affects short-term memory and focus, which makes routines like taking medication on time hard to keep. ADHD medication has strict dosing and refill schedules. A missed dose disrupts the whole day, and taking too much can raise blood pressure and strain the heart.</p>
+    <p>Women are often diagnosed later in life, so they're less used to strict medication routines, and many are also managing jobs and families. A reminder that's hard to ignore, and a log of what's actually been taken, makes a real difference.</p>
+  </section>
+
+  <section class="content-section">
+    <p class="label">02 — System overview</p>
+    <h2>At a Glance</h2>
+    <div class="chain">
+      <div class="chain-step">Web app schedule</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Raspberry Pi</div><div class="chain-arrow">→</div>
+      <div class="chain-step">LED + buzzer alert</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Button press</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Dose logged</div>
+    </div>
+    <div class="cap-grid">
+      <div class="cap-cell"><h3>Housing</h3><p>Hexagonal PLA enclosure with five pill-bottle slots, each held by a flexible TPU retention cap.</p></div>
+      <div class="cap-cell"><h3>Alerts</h3><p>An LED and button beside each bottle, plus a buzzer for sound. The LCD shows what's been taken and when the next dose is due.</p></div>
+      <div class="cap-cell"><h3>Software</h3><p>The Raspberry Pi hosts a Flask web app for adding users and medications, setting alarms, and tracking doses remotely.</p></div>
+      <div class="cap-cell"><h3>Power</h3><p>5 V Li-ion batteries make it portable, with a power cord for charging at home.</p></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">03 — Build</p>
+    <h2>Hardware &amp; Wiring</h2>
+    <p>I soldered and assembled all of the electronics: the Raspberry Pi, the LCD over HDMI, five buttons and LEDs on 3.3 V, and the buzzers, all wired into the printed housing.</p>
+    <div class="media-grid">
+      <div class="media-item"><div class="media-frame"><img src="assets/img/adhd-prototype.jpg" alt="Printed prototype with LCD on top" loading="lazy"></div><div class="media-caption">Fig. 02 — Printed prototype</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/adhd-schematic.jpg" alt="Wiring schematic for the Raspberry Pi, LCD, buttons, LEDs and buzzers" loading="lazy"></div><div class="media-caption">Fig. 03 — Wiring schematic</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/adhd-web.jpg" alt="Companion website alarm scheduler" loading="lazy"></div><div class="media-caption">Fig. 04 — Companion website: alarm scheduler</div></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">04 — Verification</p>
+    <h2>Testing Against Design Criteria</h2>
+    <div class="table-scroll">
+      <table class="tests">
+        <thead><tr><th>Criterion</th><th>Test</th><th>Target</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Reminder effectiveness</td><td>22 users rated alerts at distances up to 15 m</td><td>≥ 3 / 5</td><td class="pass">4.36 / 5</td></tr>
+          <tr><td>Pill-logging reliability</td><td>Each of 5 buttons pressed 100×, LCD checked</td><td>≥ 95%</td><td class="pass">95–98%</td></tr>
+          <tr><td>Wireless range</td><td>Settings changed from a phone at increasing distance</td><td>≥ 10 m Wi-Fi, ≥ 5 m hotspot</td><td class="pass">13 m / 8 m</td></tr>
+          <tr><td>Bottle retention</td><td>2 bottle sizes inserted &amp; removed 25× per slot</td><td>Cap stays intact</td><td class="pass">All 5 slots</td></tr>
+          <tr><td>App usability</td><td>12 users rated ease of use</td><td>≥ 4 / 5</td><td class="pass">4.25 / 5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">05 — Roadmap</p>
+    <h2>Next Iterations</h2>
+    <ul>
+      <li><b>Custom sounds:</b> replace the buzzer with a speaker so users can choose alerts that actually get their attention.</li>
+      <li><b>Family use:</b> connect several devices so a household can manage medications together.</li>
+    </ul>
+    <p>Team: L. Leininger, E. Samborski, A. Gupta, A. Misra, A. Kathapurkar.</p>
+    <div class="links-row">
+      <a class="btn btn-ghost" href="index.html#projects">← All projects</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Rev. 2026.10 · Duke University</span>
+  <span>© 2026 Luke Leininger</span>
+</footer>
+
+<dialog id="lightbox"><img alt=""><p></p><button type="button" aria-label="Close">×</button></dialog>
+<script src="script.js"></script>
+</body>
+</html>
