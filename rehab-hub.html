@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rehab Data Hub — Luke Leininger</title>
+<title>Rehab Data Hub | Luke Leininger</title>
 <meta name="description" content="A shared rehab record across hospitals with per-patient recovery models, contradiction detection and record-cited AI answers.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
 </nav>
 
 <header class="p-hero">
-  <p class="label">DWG. S-02 — Software build / Health data + AI</p>
+  <p class="label">DWG. S-02 · Software build / Health data + AI</p>
   <h1>Rehab Data Hub</h1>
   <p class="desc">A rehab patient often passes through <b>three to five organizations</b>, and information gets lost or contradicted at every handoff. This hub lets clinicians from different hospitals upload data for shared patients. It <b>flags contradictions</b> between them, trains a <b>recovery model for each patient</b>, and answers questions using <b>only that patient's records</b>.</p>
   <div class="spec-panel">
@@ -32,13 +32,13 @@
 <div class="main-image">
   <div class="fig-frame">
     <img src="assets/img/rehab-model.jpg" alt="Progress model tab showing recovery curves for FIM, gait speed, pain, knee flexion, 6-minute walk and timed up and go">
-    <div class="fig-caption"><span>Fig. 01 — Per-patient progress model</span><span>Demo patient, fictional data</span></div>
+    <div class="fig-caption"><span>Fig. 01: Per-patient progress model</span><span>Demo patient, fictional data</span></div>
   </div>
 </div>
 
 <main class="content">
   <section class="content-section">
-    <p class="label">01 — System overview</p>
+    <p class="label">01 · System overview</p>
     <h2>At a Glance</h2>
     <div class="chain">
       <div class="chain-step">JSON / CSV / notes</div><div class="chain-arrow">→</div>
@@ -56,17 +56,17 @@
   </section>
 
   <section class="content-section">
-    <p class="label">02 — Contradictions</p>
+    <p class="label">02 · Contradictions</p>
     <h2>Catching Handoff Errors</h2>
     <p>The demo patient has three real-world-style conflicts: one hospital says "no known allergies" and another lists penicillin; weight-bearing is "as tolerated" in one record and "toe-touch" in another; and two knee-flexion readings disagree by 23°. Disputed records are left out of the model until a clinician keeps one or marks both valid.</p>
     <div class="media-grid">
-      <div class="media-item"><div class="media-frame"><img src="assets/img/rehab-conflicts.jpg" alt="Contradictions tab listing weight-bearing, allergy and knee flexion conflicts" loading="lazy"></div><div class="media-caption">Fig. 02 — Open contradictions with resolve options</div></div>
-      <div class="media-item"><div class="media-frame"><img src="assets/img/rehab-overview.jpg" alt="Patient overview with clinical facts and disputed values tagged" loading="lazy"></div><div class="media-caption">Fig. 03 — Patient overview, each fact tagged with its source</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/rehab-conflicts.jpg" alt="Contradictions tab listing weight-bearing, allergy and knee flexion conflicts" loading="lazy"></div><div class="media-caption">Fig. 02: Open contradictions with resolve options</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/rehab-overview.jpg" alt="Patient overview with clinical facts and disputed values tagged" loading="lazy"></div><div class="media-caption">Fig. 03: Patient overview, each fact tagged with its source</div></div>
     </div>
   </section>
 
   <section class="content-section">
-    <p class="label">03 — Safety</p>
+    <p class="label">03 · Safety</p>
     <h2>Guardrails &amp; Access</h2>
     <ul>
       <li><b>Care teams:</b> only a patient's team can see or add to their record. Uploads from outside the team are held until a different team member approves access.</li>

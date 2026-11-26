@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FTC Into the Deep Robot — Luke Leininger</title>
+<title>FTC Into the Deep Robot | Luke Leininger</title>
 <meta name="description" content="Custom FIRST Tech Challenge robot for the 2024–25 Into the Deep season, Team 516 Gears of Fire.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
 </nav>
 
 <header class="p-hero">
-  <p class="label">DWG. R-02 — Robotics / FIRST Tech Challenge</p>
+  <p class="label">DWG. R-02 · Robotics / FIRST Tech Challenge</p>
   <h1>Custom Robot: <i>Into the Deep</i></h1>
   <p class="desc">Team 516's first <b>fully custom robot</b>: an 18" belt-driven mecanum chassis with <b>four-stage vertical slides</b>, twin horizontal slides, a <b>360° claw</b> and a worm-gear hang, refined over three major iterations in one season.</p>
   <div class="spec-panel">
@@ -32,23 +32,23 @@
 <div class="main-image">
   <div class="fig-frame">
     <img src="assets/img/itd-drivetrain-iso.jpg" alt="Isometric CAD of the custom drivetrain and slide mounts">
-    <div class="fig-caption"><span>Fig. 01 — Custom drivetrain CAD</span><span>⅛" 6061 aluminum side plates</span></div>
+    <div class="fig-caption"><span>Fig. 01: Custom drivetrain CAD</span><span>⅛" 6061 aluminum side plates</span></div>
   </div>
 </div>
 
 <main class="content">
   <section class="content-section">
-    <p class="label">01 — Strategy</p>
+    <p class="label">01 · Strategy</p>
     <h2>Designing for the Game</h2>
     <p>Our goal was a robot that could win the league championship by scoring 8+ specimens per match. Since maneuverability mattered less this season, we went with a large 18" chassis, prioritized reach with two sets of slides, and chose a level 2 ascent. The extra 15 points for level 3 weren't worth the cycling time we'd lose.</p>
     <div class="media-grid">
-      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-sketch.jpg" alt="Hand sketch of the initial robot design" loading="lazy"></div><div class="media-caption">Fig. 02 — Initial robot sketch</div></div>
-      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-drivetrain-cad.jpg" alt="Top-view CAD of the drivetrain" loading="lazy"></div><div class="media-caption">Fig. 03 — Drivetrain CAD, top view</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-sketch.jpg" alt="Hand sketch of the initial robot design" loading="lazy"></div><div class="media-caption">Fig. 02: Initial robot sketch</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-drivetrain-cad.jpg" alt="Top-view CAD of the drivetrain" loading="lazy"></div><div class="media-caption">Fig. 03: Drivetrain CAD, top view</div></div>
     </div>
   </section>
 
   <section class="content-section">
-    <p class="label">02 — Iteration</p>
+    <p class="label">02 · Iteration</p>
     <h2>Three Robots in One Season</h2>
     <ul>
       <li><b>Iteration 1 (Meet 1):</b> a mini drivetrain with a single jointed arm that could only reach the low basket. We built it as a stand-in while the custom robot was finished.</li>
@@ -62,21 +62,21 @@
       <div class="cap-cell"><h3>Hang</h3><p>Worm gear and axle for torque, with two motors so the robot lifts evenly.</p></div>
     </div>
     <div class="media-grid three">
-      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-claw-cad.jpg" alt="CAD of the claw slide connector" loading="lazy"></div><div class="media-caption">Fig. 04 — Claw connector CAD</div></div>
-      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-claw.jpg" alt="Assembled claw on a workbench" loading="lazy"></div><div class="media-caption">Fig. 05 — Claw assembly</div></div>
-      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-build.jpg" alt="Robot mid-build with slides and wiring" loading="lazy"></div><div class="media-caption">Fig. 06 — Mid-build</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-claw-cad.jpg" alt="CAD of the claw slide connector" loading="lazy"></div><div class="media-caption">Fig. 04: Claw connector CAD</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-claw.jpg" alt="Assembled claw on a workbench" loading="lazy"></div><div class="media-caption">Fig. 05: Claw assembly</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-build.jpg" alt="Robot mid-build with slides and wiring" loading="lazy"></div><div class="media-caption">Fig. 06: Mid-build</div></div>
     </div>
   </section>
 
   <section class="content-section">
-    <p class="label">03 — Software</p>
+    <p class="label">03 · Software</p>
     <h2>Autonomous &amp; Driver Control</h2>
     <p>Autonomous uses two sprung dead-wheel odometry pods fused with a Pinpoint IMU, which updates the robot's position every 0.65 ms. It's tuned in RoadRunner with PID control and scores 43 points from either the basket or the rung.</p>
     <p>In teleop, set positions move the slides and claw to scoring spots with one button. A "pecking" routine retries missed grabs quickly, and the slow mode follows the curve below for fine control. A correction algorithm also keeps the horizontal slides level as the lift rises.</p>
     <div class="math-block">speed = arctan(5x) / arctan(5)</div>
     <div class="media-grid">
-      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-paths.jpg" alt="Field diagram of autonomous paths" loading="lazy"></div><div class="media-caption">Fig. 07 — Autonomous paths</div></div>
-      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-robot.jpg" alt="Robot with vertical slides extended" loading="lazy"></div><div class="media-caption">Fig. 08 — Slides at full extension</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-paths.jpg" alt="Field diagram of autonomous paths" loading="lazy"></div><div class="media-caption">Fig. 07: Autonomous paths</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/itd-robot.jpg" alt="Robot with vertical slides extended" loading="lazy"></div><div class="media-caption">Fig. 08: Slides at full extension</div></div>
     </div>
     <div class="links-row">
       <a class="btn btn-primary" href="centerstage.html">Previous season →</a>

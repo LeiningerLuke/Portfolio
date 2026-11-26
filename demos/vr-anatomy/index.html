@@ -145,20 +145,20 @@ const REGIONS = ['Head & neck', 'Thorax', 'Abdomen', 'Pelvis', 'Upper limb', 'Lo
  * ------------------------------------------------------------------ */
 const DESC = [
   // --- skeletal ---
-  [/^femur$/i, 'The thigh bone — the longest and strongest bone in the body, about a quarter of your height. Its ball-shaped head fits the acetabulum of the hip bone; the greater trochanter is the bump you can feel at the side of the hip. At the knee its two condyles rest on the tibia.'],
+  [/^femur$/i, 'The thigh bone, the longest and strongest bone in the body, about a quarter of your height. Its ball-shaped head fits the acetabulum of the hip bone; the greater trochanter is the bump you can feel at the side of the hip. At the knee its two condyles rest on the tibia.'],
   [/^patella$/i, 'The kneecap: a sesamoid bone inside the quadriceps tendon. It protects the knee joint and increases the leverage of the quadriceps when straightening the leg.'],
   [/^tibia$/i, 'The shinbone: the larger, weight-bearing bone of the lower leg. Its flat top (tibial plateau) forms the knee with the femur; its lower end forms the medial malleolus, the inner ankle bump.'],
-  [/^fibula$/i, 'The thin bone on the outer side of the lower leg. It bears little weight but anchors muscles and forms the lateral malleolus — the outer ankle bump that stabilises the ankle.'],
+  [/^fibula$/i, 'The thin bone on the outer side of the lower leg. It bears little weight but anchors muscles and forms the lateral malleolus, the outer ankle bump that stabilises the ankle.'],
   [/^humerus$/i, 'The upper-arm bone. Its rounded head fits the glenoid cavity of the scapula (a ball-and-socket joint); at the elbow it hinges with the radius and ulna. The radial nerve spirals around its shaft.'],
   [/^radius$/i, 'The forearm bone on the thumb side. It rotates around the ulna so you can turn the palm up (supination) and down (pronation). Its lower end is a very common fracture site (Colles\' fracture).'],
   [/^ulna$/i, 'The forearm bone on the little-finger side. Its hook-shaped olecranon is the point of the elbow, and it forms the main hinge joint with the humerus.'],
   [/^clavicle$/i, 'The collarbone: an S-shaped strut connecting the sternum to the scapula, holding the arm out from the body. One of the most commonly fractured bones.'],
   [/^scapula$/i, 'The shoulder blade: a flat triangular bone on the upper back. Its glenoid cavity forms the shoulder socket and 17 muscles attach to it, including the four rotator-cuff muscles.'],
-  [/^(manubrium|body of sternum|xiphoid process)$/i, 'Part of the sternum (breastbone). The sternum has three parts — the manubrium at the top, the body in the middle and the small xiphoid process at the bottom — and anchors the clavicles and the costal cartilages of the upper ribs.'],
+  [/^(manubrium|body of sternum|xiphoid process)$/i, 'Part of the sternum (breastbone). The sternum has three parts (the manubrium at the top, the body in the middle and the small xiphoid process at the bottom) and anchors the clavicles and the costal cartilages of the upper ribs.'],
   [/costal cartilage/i, 'Bar of hyaline cartilage joining a rib to the sternum (or to the cartilage above). Its flexibility lets the chest wall expand when you breathe in.'],
   [/(first|second|third|fourth|fifth|sixth|seventh) rib$/i, 'A "true rib": one of ribs 1–7, which attach directly to the sternum through their own costal cartilage. The ribs protect the heart and lungs and lift up and out as you inhale.'],
   [/(eighth|ninth|tenth) rib$/i, 'A "false rib": ribs 8–10 join the sternum indirectly, via the costal cartilage of the rib above. They form the lower edge of the rib cage (the costal margin).'],
-  [/(eleventh|twelfth) rib$/i, 'A "floating rib": ribs 11–12 have no attachment to the sternum at all — their tips end in the muscles of the flank.'],
+  [/(eleventh|twelfth) rib$/i, 'A "floating rib": ribs 11–12 have no attachment to the sternum at all; their tips end in the muscles of the flank.'],
   [/^atlas$/i, 'C1, the first cervical vertebra. It has no body; it is a ring that supports the skull and allows the nodding ("yes") movement.'],
   [/^axis$/i, 'C2, the second cervical vertebra. Its upward peg (the dens) sits inside the atlas and acts as the pivot for turning the head ("no" movement).'],
   [/cervical vertebra/i, 'One of the seven neck vertebrae (C1–C7). They are the smallest vertebrae and have holes in their transverse processes that carry the vertebral arteries to the brain. C7 has the prominent spinous process you can feel at the base of the neck.'],
@@ -167,7 +167,7 @@ const DESC = [
   [/intervertebral disk/i, 'A fibrocartilage cushion between two vertebral bodies: a tough outer ring (annulus fibrosus) around a gel-like core (nucleus pulposus). It absorbs shock and allows the spine to bend; a "slipped disc" is a herniation of the core.'],
   [/^sacrum$/i, 'Five fused vertebrae forming the back wall of the pelvis. It joins the hip bones at the sacroiliac joints and transmits the weight of the trunk to the legs.'],
   [/^hip bone$/i, 'The hip bone (os coxae) is three fused bones: the ilium (the flared upper part), the ischium (the part you sit on) and the pubis (the front). Its cup-shaped acetabulum is the socket of the hip joint.'],
-  [/^mandible$/i, 'The lower jaw — the only movable bone of the skull and the strongest bone of the face. It holds the lower teeth and hinges at the temporomandibular joint just in front of each ear.'],
+  [/^mandible$/i, 'The lower jaw, the only movable bone of the skull and the strongest bone of the face. It holds the lower teeth and hinges at the temporomandibular joint just in front of each ear.'],
   [/^maxilla$/i, 'The upper jaw bone. The two maxillae hold the upper teeth, form the hard palate and the floor of the orbits, and contain the large maxillary sinuses.'],
   [/^frontal bone$/i, 'Forms the forehead and the roofs of the eye sockets. It contains the frontal sinuses and meets the parietal bones at the coronal suture.'],
   [/^parietal bone$/i, 'The paired bones forming the top and sides of the cranium, joined in the midline at the sagittal suture.'],
@@ -184,19 +184,19 @@ const DESC = [
   [/molar tooth/i, 'A molar: a broad, multi-cusped back tooth for grinding food. Adults have up to 12, including wisdom teeth.'],
   [/^(scaphoid|lunate|triquetral|pisiform|trapezium|trapezoid|capitate|hamate)$/i, 'One of the eight carpal (wrist) bones, arranged in two rows of four. The scaphoid is the most commonly fractured carpal bone.'],
   [/metacarpal/i, 'A metacarpal: one of the five long bones of the palm, connecting the wrist to the finger bones. Their heads form the knuckles.'],
-  [/phalanx of .*(finger|thumb)/i, 'A phalanx (finger bone). Each finger has three — proximal, middle and distal — and the thumb has two.'],
+  [/phalanx of .*(finger|thumb)/i, 'A phalanx (finger bone). Each finger has three (proximal, middle and distal), and the thumb has two.'],
   [/phalanx of .*toe/i, 'A phalanx (toe bone). Each toe has three, except the big toe which has two.'],
   [/^(talus|calcaneus|navicular bone of foot|cuboid bone|.*cuneiform bone)$/i, 'One of the seven tarsal (ankle/hind-foot) bones. The talus forms the ankle joint with the tibia and fibula; the calcaneus is the heel bone, the largest bone of the foot.'],
   [/metatarsal/i, 'A metatarsal: one of the five long bones of the mid-foot. Together with the tarsals they form the arches of the foot.'],
   // --- muscular ---
   [/deltoid/i, 'Part of the deltoid, the rounded muscle capping the shoulder. Its front (clavicular), middle (acromial) and back (spinal) parts raise the arm forward, sideways and backward.'],
-  [/pectoralis major/i, 'Part of the pectoralis major, the large fan-shaped chest muscle. It pulls the arm across the body and rotates it inward — used in pushing and hugging.'],
+  [/pectoralis major/i, 'Part of the pectoralis major, the large fan-shaped chest muscle. It pulls the arm across the body and rotates it inward, used in pushing and hugging.'],
   [/pectoralis minor/i, 'A thin triangular muscle under the pectoralis major, pulling the shoulder blade forward and down. Important landmark for the nerves and vessels heading to the arm.'],
   [/biceps brachii/i, 'Part of the biceps brachii, the two-headed muscle on the front of the upper arm. It bends the elbow and turns the palm upward (supination).'],
-  [/triceps brachii/i, 'Part of the triceps brachii, the three-headed muscle on the back of the arm — the main straightener (extensor) of the elbow.'],
+  [/triceps brachii/i, 'Part of the triceps brachii, the three-headed muscle on the back of the arm, the main straightener (extensor) of the elbow.'],
   [/trapezius/i, 'Part of the trapezius, the large diamond-shaped muscle of the upper back and neck. It shrugs, retracts and rotates the shoulder blades.'],
   [/sternocleidomastoid/i, 'Runs from the sternum and clavicle to the mastoid process behind the ear. One side turns the head to the opposite side; both together bend the neck forward.'],
-  [/gluteus maximus/i, 'The largest muscle in the body, forming the buttock. It extends and rotates the hip — essential for climbing stairs, running and standing up.'],
+  [/gluteus maximus/i, 'The largest muscle in the body, forming the buttock. It extends and rotates the hip, essential for climbing stairs, running and standing up.'],
   [/gluteus (medius|minimus)/i, 'A hip abductor on the side of the pelvis. It keeps the pelvis level when you stand on one leg; weakness causes a waddling (Trendelenburg) gait.'],
   [/^(rectus femoris|vastus)/i, 'One of the four quadriceps muscles on the front of the thigh. They join in the patellar tendon and straighten the knee.'],
   [/(biceps femoris|semitendinosus|semimembranosus)/i, 'One of the hamstrings on the back of the thigh. They bend the knee and extend the hip, and are commonly strained when sprinting.'],
@@ -207,7 +207,7 @@ const DESC = [
   [/serratus anterior/i, 'A saw-toothed muscle on the side of the rib cage that holds the shoulder blade against the chest and lets you reach and punch. Paralysis causes a "winged scapula".'],
   [/external oblique/i, 'The largest and outermost flat abdominal muscle. It flexes and twists the trunk and supports the abdominal organs.'],
   [/intercostal muscle/i, 'Thin muscles between the ribs that raise and lower the rib cage during breathing. Intercostal nerves and vessels run along the lower edge of each rib.'],
-  [/^calcaneal tendon$/i, 'The Achilles tendon — the thickest and strongest tendon in the body, joining the calf muscles to the heel bone.'],
+  [/^calcaneal tendon$/i, 'The Achilles tendon, the thickest and strongest tendon in the body, joining the calf muscles to the heel bone.'],
   [/^platysma$/i, 'A thin sheet of muscle in the skin of the neck that tenses the neck skin and pulls the corners of the mouth down.'],
   [/^(superior|inferior|lateral|medial) rectus$|^(superior|inferior) oblique$/i, 'One of the six extra-ocular muscles that move the eyeball. Each is controlled by a cranial nerve (III, IV or VI).'],
   // --- nervous / senses ---
@@ -217,17 +217,17 @@ const DESC = [
   [/inferior frontal gyrus/i, 'On the left side this gyrus contains Broca\'s area, which is essential for producing speech.'],
   [/(superior|middle) frontal gyrus/i, 'Part of the frontal lobe involved in planning, working memory, attention and voluntary eye movements.'],
   [/occipital lobe/i, 'The rear lobe of the cerebrum, containing the primary visual cortex that processes everything you see.'],
-  [/(angular|supramarginal) gyrus|superior parietal lobule/i, 'Part of the parietal lobe, integrating touch, vision and language — involved in reading, writing, calculation and awareness of space and the body.'],
+  [/(angular|supramarginal) gyrus|superior parietal lobule/i, 'Part of the parietal lobe, integrating touch, vision and language, involved in reading, writing, calculation and awareness of space and the body.'],
   [/cingulate gyrus/i, 'Part of the limbic system curving over the corpus callosum, involved in emotion, motivation, pain and attention.'],
   [/(parahippocampal|fusiform) gyrus/i, 'A gyrus on the underside of the temporal lobe; the fusiform gyrus recognises faces and words, the parahippocampal gyrus helps with memory and recognising places.'],
   [/white matter of cerebral hemisphere/i, 'The white matter of a cerebral hemisphere: bundles of myelinated nerve fibres connecting cortical areas to each other and to deeper brain structures. The model shows it beneath the gyri.'],
-  [/^corpus callosum$/i, 'The largest bundle of nerve fibres in the brain — about 200 million axons connecting the left and right cerebral hemispheres.'],
+  [/^corpus callosum$/i, 'The largest bundle of nerve fibres in the brain, about 200 million axons connecting the left and right cerebral hemispheres.'],
   [/^cerebellum$/i, 'The "little brain" at the back of the skull. It coordinates balance, posture and smooth, precise movements, and contains more neurons than the rest of the brain combined.'],
   [/^thalamus$/i, 'A paired relay station deep in the brain. Almost all sensory information (except smell) passes through it on the way to the cortex.'],
-  [/^hypothalamus$/i, 'A small region below the thalamus that controls body temperature, hunger, thirst, sleep and the pituitary gland — linking the nervous and endocrine systems.'],
+  [/^hypothalamus$/i, 'A small region below the thalamus that controls body temperature, hunger, thirst, sleep and the pituitary gland, linking the nervous and endocrine systems.'],
   [/^hippocampus$/i, 'A curved structure in the temporal lobe essential for forming new memories and spatial navigation; one of the first areas damaged in Alzheimer\'s disease.'],
   [/^amygdala$/i, 'An almond-shaped cluster of nuclei in the temporal lobe that processes emotions, especially fear, and links emotion to memory.'],
-  [/^(midbrain|pons|medulla oblongata)$/i, 'Part of the brainstem, which connects the brain to the spinal cord and controls vital automatic functions — breathing, heart rate, blood pressure and consciousness. Most cranial nerves arise here.'],
+  [/^(midbrain|pons|medulla oblongata)$/i, 'Part of the brainstem, which connects the brain to the spinal cord and controls vital automatic functions: breathing, heart rate, blood pressure and consciousness. Most cranial nerves arise here.'],
   [/^(caudate nucleus|putamen|globus pallidus)$/i, 'Part of the basal ganglia, deep nuclei that help start and smooth voluntary movement. Their dysfunction causes Parkinson\'s and Huntington\'s disease.'],
   [/lateral ventricle|third ventricle|fourth ventricle|cerebral aqueduct/i, 'Part of the ventricular system: fluid-filled cavities inside the brain that produce and circulate cerebrospinal fluid (CSF), which cushions the brain and spinal cord.'],
   [/^spinal cord$/i, 'A cable of nerve tissue about 45 cm long inside the vertebral canal, from the brainstem to about L1–L2. It carries signals between the brain and body, handles reflexes, and gives off 31 pairs of spinal nerves. (Approximate shape: BodyParts3D has no spinal cord, so this one was traced through the real vertebral canal.)'],
@@ -240,7 +240,7 @@ const DESC = [
   [/^sclera$/i, 'The tough white outer coat of the eyeball, which protects it and anchors the eye muscles.'],
   [/^vitreous body$/i, 'The clear gel that fills the space between the lens and the retina, keeping the eyeball\'s shape.'],
   [/^pineal body$/i, 'A small gland in the middle of the brain that secretes melatonin, regulating the sleep–wake cycle.'],
-  [/nerve/i, 'A nerve: a bundle of nerve fibres carrying signals between the central nervous system and the body — motor commands out to muscles and glands, and sensory information back in.'],
+  [/nerve/i, 'A nerve: a bundle of nerve fibres carrying signals between the central nervous system and the body: motor commands out to muscles and glands, and sensory information back in.'],
   // --- cardiovascular ---
   [/wall of ventricle/i, 'The muscular walls of the heart\'s ventricles (myocardium). The left ventricle wall is about three times thicker than the right because it pumps blood around the whole body.'],
   [/wall of (left|right) atrium/i, 'The wall of an atrium, one of the two upper receiving chambers of the heart. The right atrium collects blood from the body; the left atrium collects oxygenated blood from the lungs.'],
@@ -260,7 +260,7 @@ const DESC = [
   [/great saphenous vein/i, 'The longest vein in the body, running up the inside of the leg just under the skin. It is often harvested for coronary bypass grafts; when its valves fail it forms varicose veins.'],
   [/portal vein/i, 'Part of the hepatic portal system, which carries nutrient-rich blood from the intestines, stomach, pancreas and spleen to the liver for processing before it returns to the heart.'],
   [/renal (artery|vein)/i, 'A renal vessel. The kidneys receive about 20% of the heart\'s output through the renal arteries.'],
-  [/artery|arteries|arterial|arteria/i, 'An artery: a thick, elastic-walled vessel carrying blood away from the heart under high pressure — oxygen-rich, except in the pulmonary arteries.'],
+  [/artery|arteries|arterial|arteria/i, 'An artery: a thick, elastic-walled vessel carrying blood away from the heart under high pressure, oxygen-rich, except in the pulmonary arteries.'],
   [/vein|venous/i, 'A vein: a thin-walled vessel carrying blood back toward the heart. Many veins have one-way valves, and nearby muscle contractions help push blood along.'],
   // --- respiratory ---
   [/lung$/i, 'A lung (approximate shape). BodyParts3D does not include lung tissue, so this surface was generated to wrap the real bronchial tree shown inside it. The right lung has three lobes, the left has two plus a notch for the heart. Inside, about 480 million alveoli exchange oxygen and carbon dioxide.'],
@@ -271,7 +271,7 @@ const DESC = [
   [/^cricoid cartilage$/i, 'The only complete ring of cartilage in the airway, sitting below the thyroid cartilage at the base of the larynx.'],
   [/^epiglottis$/i, 'A leaf-shaped flap of cartilage that folds down over the larynx during swallowing to keep food and drink out of the airway.'],
   [/arytenoid cartilage|vocal ligament|vocalis/i, 'Part of the voice box. The arytenoid cartilages pivot to open, close and tension the vocal cords, producing sound as air passes through.'],
-  [/^diaphragm$/i, 'The dome-shaped muscle separating the chest from the abdomen — the main muscle of breathing. It flattens when it contracts, drawing air into the lungs. Supplied by the phrenic nerve (C3–C5).'],
+  [/^diaphragm$/i, 'The dome-shaped muscle separating the chest from the abdomen, the main muscle of breathing. It flattens when it contracts, drawing air into the lungs. Supplied by the phrenic nerve (C3–C5).'],
   // --- digestive ---
   [/^esophagus$/i, 'A muscular tube about 25 cm long carrying food from the pharynx to the stomach by waves of contraction (peristalsis).'],
   [/^stomach$/i, 'A J-shaped muscular sac that stores food, churns it with acid and pepsin to begin protein digestion, and releases it gradually into the duodenum through the pyloric sphincter.'],
@@ -282,7 +282,7 @@ const DESC = [
   [/^appendix$/i, 'A narrow pouch off the cecum containing lymphoid tissue; inflammation (appendicitis) is a common surgical emergency.'],
   [/hepatovenous segment|caudate lobe of liver/i, 'A segment of the liver. Surgeons divide the liver into 8 functional (Couinaud) segments, each with its own blood supply and bile drainage, so one can be removed without harming the rest. Together they form the largest internal organ (about 1.5 kg).'],
   [/^gallbladder$/i, 'A small pear-shaped sac under the liver that stores and concentrates bile, squeezing it into the duodenum after fatty meals. Gallstones form here.'],
-  [/biliary|hepatic duct|cystic duct/i, 'Part of the biliary tree — ducts that collect bile made by liver cells and carry it to the gallbladder and duodenum.'],
+  [/biliary|hepatic duct|cystic duct/i, 'Part of the biliary tree, ducts that collect bile made by liver cells and carry it to the gallbladder and duodenum.'],
   [/pancrea/i, 'Part of the pancreas, a gland behind the stomach. It makes digestive enzymes (sent into the duodenum) and the hormones insulin and glucagon that control blood sugar.'],
   [/^tongue$/i, 'A muscular organ for tasting, chewing, swallowing and speech. Its surface carries thousands of taste buds.'],
   [/(submandibular|sublingual) gland/i, 'A salivary gland. Together the salivary glands produce 1–1.5 L of saliva a day, which moistens food and begins starch digestion.'],
@@ -290,7 +290,7 @@ const DESC = [
   [/^kidney$/i, 'Bean-shaped organs against the back muscles at about T12–L3; the right sits lower because of the liver. About a million nephrons in each filter ~180 L of plasma a day to make urine and regulate blood pressure, salt balance and pH.'],
   [/^ureter$/i, 'A muscular tube 25–30 cm long carrying urine from the kidney to the bladder by peristalsis.'],
   [/^urinary bladder$/i, 'A hollow, stretchy muscular organ behind the pubic bone that stores urine (comfortably 400–600 mL) and empties it through the urethra.'],
-  [/^urethra$/i, 'The tube carrying urine (and in males, semen) out of the body — about 20 cm long in males.'],
+  [/^urethra$/i, 'The tube carrying urine (and in males, semen) out of the body, about 20 cm long in males.'],
   [/^testis$/i, 'The male gonad, producing sperm and the hormone testosterone. It sits in the scrotum, a few degrees cooler than the body.'],
   [/^epididymis$/i, 'A tightly coiled tube on the back of each testis where sperm mature and are stored.'],
   [/deferent duct/i, 'The ductus (vas) deferens, carrying sperm from the epididymis to the urethra; it is the tube cut in a vasectomy.'],
@@ -300,13 +300,13 @@ const DESC = [
   [/^pituitary gland$/i, 'The pea-sized "master gland" at the base of the brain, controlling growth, the thyroid, adrenals, reproduction and water balance under direction from the hypothalamus.'],
   [/^spleen$/i, 'A fist-sized organ in the upper left abdomen that filters blood, removes old red cells and helps fight infection.'],
   [/thymus/i, 'A lobe of the thymus, the gland behind the sternum where T-lymphocytes mature. Largest in childhood, it is gradually replaced by fat.'],
-  [/^skin$/i, 'The body\'s largest organ (about 2 m²). Its layers — epidermis, dermis and hypodermis — protect against injury and germs, regulate temperature and contain touch, pain and temperature receptors. Shown translucent so you can see inside.'],
+  [/^skin$/i, 'The body\'s largest organ (about 2 m²). Its layers (epidermis, dermis and hypodermis) protect against injury and germs, regulate temperature and contain touch, pain and temperature receptors. Shown translucent so you can see inside.'],
 ];
 const GENERIC = {
   skeletal: 'Part of the skeletal system, which supports the body, protects organs, anchors muscles, stores calcium and makes blood cells in the marrow.',
   muscular: 'A skeletal muscle (or part of one). Muscles move the body by contracting and pulling on bones through their tendons; their names often describe their shape, position or action.',
   nervous: 'Part of the nervous system or special senses, which detect, transmit and process information and control the body.',
-  cardiovascular: 'Part of the cardiovascular system, which pumps and carries blood — delivering oxygen and nutrients and removing waste.',
+  cardiovascular: 'Part of the cardiovascular system, which pumps and carries blood, delivering oxygen and nutrients and removing waste.',
   respiratory: 'Part of the respiratory system, which moves air in and out and exchanges oxygen and carbon dioxide with the blood.',
   digestive: 'Part of the digestive system, which breaks food down and absorbs nutrients.',
   urinary: 'Part of the urinary system, which filters blood and removes waste as urine.',
@@ -789,7 +789,7 @@ function drawMenu() {
     const col = i % 2, row = Math.floor(i / 2), x = 30 + col * 487, y = 132 + row * 76, S = SYSTEMS[k];
     p.button('sys:' + k, x, y, 380, 66, S.name, { on: vrState.browse === k, color: S.color, align: 'left', size: 27,
       onClick: () => { vrState.browse = k; vrState.page = 0; const rs = regionsOf(k); if (!rs.includes(vrState.region)) vrState.region = rs[0]; drawMenu(); } });
-    p.button('eye:' + k, x + 390, y, 87, 66, S.on ? '👁' : '—', { on: S.on, size: 32, onClick: () => { S.on = !S.on; applyState(); } });
+    p.button('eye:' + k, x + 390, y, 87, 66, S.on ? '👁' : '–', { on: S.on, size: 32, onClick: () => { S.on = !S.on; applyState(); } });
   });
   const regs = regionsOf(vrState.browse);
   if (!regs.includes(vrState.region)) vrState.region = regs[0];
@@ -802,7 +802,7 @@ function drawMenu() {
   vrState.page = Math.min(vrState.page, pages - 1);
   const y0 = yR + 96;
   c.fillStyle = SYSTEMS[vrState.browse].color; c.font = 'bold 30px system-ui, sans-serif'; c.textAlign = 'left';
-  c.fillText(`${vrState.region} — ${items.length} structures`, 40, y0 - 18);
+  c.fillText(`${vrState.region} · ${items.length} structures`, 40, y0 - 18);
   c.fillStyle = '#93a1b5'; c.font = '26px system-ui, sans-serif'; c.textAlign = 'right';
   c.fillText(`page ${vrState.page + 1} / ${pages}`, p.w - 40, y0 - 18);
   items.slice(vrState.page * PER_PAGE, vrState.page * PER_PAGE + PER_PAGE).forEach((P, i) => {
