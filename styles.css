@@ -140,6 +140,12 @@ h1, h2 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; m
 .contact { text-align: center; padding: 96px 24px 120px; }
 .contact p { color: var(--ink-2); max-width: 52ch; margin: 0 auto 32px; }
 .contact .section-title { margin-bottom: 20px; }
+.mail-fallback {
+  max-width: 420px; margin: 24px auto 0; padding: 16px 20px;
+  border: 1px dashed var(--accent-soft); background: var(--card);
+}
+.mail-fallback p { margin: 0 0 10px !important; font-size: 15px; }
+.mail-fallback .card-links { justify-content: center; }
 .contact .contact-email { margin: 18px auto 0; font: 400 14px/1.4 var(--mono); letter-spacing: 0.04em; color: var(--ink-2); user-select: all; }
 
 footer {

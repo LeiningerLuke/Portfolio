@@ -146,10 +146,17 @@
   <h2 class="section-title">Get In Touch</h2>
   <p>I'm looking for research and internship opportunities in biomedical engineering. If you have a question or just want to say hi, my inbox is open.</p>
   <div class="hero-cta">
-    <a class="btn btn-primary" href="mailto:luke.leininger@duke.edu?subject=Hello%20from%20your%20portfolio">Say hello →</a>
+    <a class="btn btn-primary" id="say-hello" href="mailto:luke.leininger@duke.edu?subject=Hello%20from%20your%20portfolio">Say hello →</a>
     <button class="btn btn-ghost" type="button" id="copy-email" data-email="luke.leininger@duke.edu">Copy email</button>
   </div>
   <p class="contact-email">luke.leininger@duke.edu</p>
+  <div class="mail-fallback" id="mail-fallback" hidden>
+    <p>No email app opened? Write from your browser instead:</p>
+    <div class="card-links">
+      <a class="card-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=luke.leininger@duke.edu&amp;su=Hello%20from%20your%20portfolio" target="_blank" rel="noopener">↗ Gmail</a>
+      <a class="card-link" href="https://outlook.live.com/mail/0/deeplink/compose?to=luke.leininger@duke.edu&amp;subject=Hello%20from%20your%20portfolio" target="_blank" rel="noopener">↗ Outlook</a>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -158,6 +165,21 @@
 </footer>
 
 <script>
+  // If clicking "Say hello" doesn't hand off to an email app (the page never
+  // loses focus), offer webmail links instead.
+  const fallback = document.getElementById('mail-fallback');
+  document.getElementById('say-hello').addEventListener('click', () => {
+    let left = false;
+    const mark = () => { left = true; };
+    window.addEventListener('blur', mark, { once: true });
+    document.addEventListener('visibilitychange', mark, { once: true });
+    setTimeout(() => {
+      window.removeEventListener('blur', mark);
+      document.removeEventListener('visibilitychange', mark);
+      if (!left) fallback.hidden = false;
+    }, 1500);
+  });
+
   // Fallback for visitors with no email app: copy the address instead.
   const copyBtn = document.getElementById('copy-email');
   copyBtn.addEventListener('click', async () => {
