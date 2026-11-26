@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anatomy Explorer VR</title>
+<style>
+  :root {
+    --bg: #0b0f16; --panel: rgba(17, 23, 33, 0.93); --line: #263244; --text: #e7edf5;
+    --muted: #93a1b5; --accent: #5ec2ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
+  canvas#scene { display: block; position: fixed; inset: 0; }
+  #sidebar { position: fixed; top: 12px; left: 12px; bottom: 12px; width: 310px; background: var(--panel);
+    border: 1px solid var(--line); border-radius: 14px; display: flex; flex-direction: column; z-index: 5;
+    backdrop-filter: blur(6px); transition: transform .25s; }
+  #sidebar.collapsed { transform: translateX(calc(-100% - 20px)); }
+  #sidebar header { padding: 14px 14px 8px; border-bottom: 1px solid var(--line); }
+  #sidebar h1 { font-size: 17px; margin: 0 0 8px; letter-spacing: .2px; }
+  #sidebar h1 span { color: var(--accent); }
+  #search { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line);
+    background: #0d131c; color: var(--text); font-size: 14px; outline: none; }
+  #search:focus { border-color: var(--accent); }
+  #toggles { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .chip { font-size: 12px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line);
+    background: #0d131c; color: var(--muted); cursor: pointer; user-select: none; }
+  .chip.on { color: #06131d; background: var(--accent); border-color: var(--accent); }
+  #list { overflow-y: auto; padding: 6px 8px 12px; flex: 1; }
+  details { border-bottom: 1px solid #1a2330; }
+  summary { list-style: none; display: flex; align-items: center; gap: 8px; padding: 8px 6px; cursor: pointer; font-weight: 600; }
+  summary::-webkit-details-marker { display: none; }
+  summary .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  summary .count { margin-left: auto; color: var(--muted); font-weight: 400; font-size: 12px; }
+  summary input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+  .region { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .8px; padding: 8px 8px 2px 30px; }
+  .item { display: block; width: 100%; text-align: left; background: none; border: 0; color: var(--text);
+    padding: 4px 8px 4px 30px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+  .item:hover { background: #18212e; }
+  .item.sel { background: #1d3a52; color: #fff; }
+  #info { position: fixed; right: 12px; bottom: 12px; width: 370px; max-width: calc(100vw - 24px);
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; z-index: 5;
+    backdrop-filter: blur(6px); }
+  #info.hidden { display: none; }
+  #info .sys { display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: .8px; padding: 2px 8px;
+    border-radius: 999px; color: #06131d; font-weight: 700; }
+  #info .meta { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  #info h2 { margin: 8px 0 6px; font-size: 19px; }
+  #info p { margin: 0 0 12px; color: #cdd6e2; max-height: 32vh; overflow-y: auto; }
+  #info .row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .btn { padding: 7px 11px; border-radius: 8px; border: 1px solid var(--line); background: #131b27; color: var(--text);
+    cursor: pointer; font-size: 13px; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.on { background: var(--accent); color: #06131d; border-color: var(--accent); }
+  #xr { position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px; display: flex; gap: 10px; z-index: 6; }
+  #xr button { padding: 12px 20px; border-radius: 10px; border: 2px solid var(--accent); background: #0b1a26; color: #fff;
+    font-weight: 700; font-size: 15px; cursor: pointer; }
+  #xr button:disabled { border-color: #444; color: #777; cursor: not-allowed; }
+  #xrmsg { position: fixed; left: 50%; transform: translateX(-50%); bottom: 70px; color: var(--muted); font-size: 12px;
+    text-align: center; z-index: 6; max-width: 90vw; }
+  #tip { position: fixed; pointer-events: none; background: #000c; color: #fff; padding: 3px 8px; border-radius: 6px;
+    font-size: 12px; z-index: 7; display: none; }
+  #menuBtn { position: fixed; top: 12px; left: 12px; z-index: 4; }
+  #help { position: fixed; top: 12px; right: 12px; color: var(--muted); font-size: 12px; text-align: right; z-index: 4;
+    background: #0008; padding: 6px 10px; border-radius: 8px; }
+  #loading { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: var(--bg); z-index: 20; }
+  #loading .bar { width: 260px; height: 6px; background: #1a2330; border-radius: 3px; overflow: hidden; }
+  #loading .bar div { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+  #credit { position: fixed; left: 50%; transform: translateX(-50%); bottom: 2px; font-size: 10px; color: #5d6b7e; z-index: 4; white-space: nowrap; }
+  #credit a { color: inherit; }
+  @media (max-width: 760px) {
+    #sidebar { width: calc(100vw - 24px); bottom: 45vh; }
+    #info { bottom: 80px; }
+    #help, #credit { display: none; }
+  }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="loading"><div>Loading anatomy model…</div><div class="bar"><div id="loadbar"></div></div><div id="loadtxt" style="color:#93a1b5;font-size:12px"></div></div>
+<canvas id="scene"></canvas>
+<button id="menuBtn" class="btn">☰ Structures</button>
+<aside id="sidebar">
+  <header>
+    <h1>Anatomy Explorer <span>VR</span></h1>
+    <input id="search" placeholder="Search 1,000+ structures (e.g. femur, mitral)…" autocomplete="off">
+    <div id="toggles">
+      <span class="chip on" id="tFocus" title="Fade everything except the selected structure">X-ray focus</span>
+      <span class="chip" id="tIsolate" title="Show only the selected structure">Isolate</span>
+      <span class="chip" id="tAll">Show all</span>
+      <span class="chip" id="tHide">Hide panel</span>
+    </div>
+  </header>
+  <div id="list"></div>
+</aside>
+<div id="info" class="hidden">
+  <span class="sys" id="iSys"></span><span class="meta" id="iMeta"></span>
+  <h2 id="iName"></h2>
+  <p id="iDesc"></p>
+  <div class="row">
+    <button class="btn" id="iZoom">Zoom to</button>
+    <button class="btn" id="iIso">Isolate</button>
+    <button class="btn" id="iClear">Clear</button>
+  </div>
+</div>
+<div id="help">Drag: rotate · Scroll: zoom · Right-drag: pan · Click a structure to identify it</div>
+<div id="xr"><button id="btnVR" disabled>Checking VR…</button><button id="btnAR" disabled style="display:none">Enter AR (passthrough)</button></div>
+<div id="xrmsg"></div>
+<div id="tip"></div>
+<div id="credit">3D data: <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/" target="_blank" rel="noopener">BodyParts3D</a>, © The Database Center for Life Science, CC BY 4.0 (simplified)</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFactory.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* ------------------------------------------------------------------ *
+ *  Systems & regions
+ * ------------------------------------------------------------------ */
+const SYSTEMS = {
+  skeletal:       { name: 'Skeletal',            color: '#e8dcc0', on: true  },
+  muscular:       { name: 'Muscular',            color: '#c0463c', on: false },
+  nervous:        { name: 'Nervous & Senses',    color: '#f2d16b', on: true  },
+  cardiovascular: { name: 'Cardiovascular',      color: '#d6303a', on: true  },
+  respiratory:    { name: 'Respiratory',         color: '#f09a9a', on: true  },
+  digestive:      { name: 'Digestive',           color: '#d99a6c', on: true  },
+  urinary:        { name: 'Urinary',             color: '#d9b84a', on: true  },
+  reproductive:   { name: 'Reproductive',        color: '#e07fb0', on: true  },
+  endocrine:      { name: 'Endocrine',           color: '#b77ce0', on: true  },
+  lymphatic:      { name: 'Lymphatic & Immune',  color: '#7fc8a9', on: true  },
+  integumentary:  { name: 'Skin & Hair',         color: '#f0c8a8', on: true  },
+};
+const REGIONS = ['Head & neck', 'Thorax', 'Abdomen', 'Pelvis', 'Upper limb', 'Lower limb'];
+
+/* ------------------------------------------------------------------ *
+ *  Descriptions: curated entries (first match wins) + generic fallback
+ * ------------------------------------------------------------------ */
+const DESC = [
+  // --- skeletal ---
+  [/^femur$/i, 'The thigh bone — the longest and strongest bone in the body, about a quarter of your height. Its ball-shaped head fits the acetabulum of the hip bone; the greater trochanter is the bump you can feel at the side of the hip. At the knee its two condyles rest on the tibia.'],
+  [/^patella$/i, 'The kneecap: a sesamoid bone inside the quadriceps tendon. It protects the knee joint and increases the leverage of the quadriceps when straightening the leg.'],
+  [/^tibia$/i, 'The shinbone: the larger, weight-bearing bone of the lower leg. Its flat top (tibial plateau) forms the knee with the femur; its lower end forms the medial malleolus, the inner ankle bump.'],
+  [/^fibula$/i, 'The thin bone on the outer side of the lower leg. It bears little weight but anchors muscles and forms the lateral malleolus — the outer ankle bump that stabilises the ankle.'],
+  [/^humerus$/i, 'The upper-arm bone. Its rounded head fits the glenoid cavity of the scapula (a ball-and-socket joint); at the elbow it hinges with the radius and ulna. The radial nerve spirals around its shaft.'],
+  [/^radius$/i, 'The forearm bone on the thumb side. It rotates around the ulna so you can turn the palm up (supination) and down (pronation). Its lower end is a very common fracture site (Colles\' fracture).'],
+  [/^ulna$/i, 'The forearm bone on the little-finger side. Its hook-shaped olecranon is the point of the elbow, and it forms the main hinge joint with the humerus.'],
+  [/^clavicle$/i, 'The collarbone: an S-shaped strut connecting the sternum to the scapula, holding the arm out from the body. One of the most commonly fractured bones.'],
+  [/^scapula$/i, 'The shoulder blade: a flat triangular bone on the upper back. Its glenoid cavity forms the shoulder socket and 17 muscles attach to it, including the four rotator-cuff muscles.'],
+  [/^(manubrium|body of sternum|xiphoid process)$/i, 'Part of the sternum (breastbone). The sternum has three parts — the manubrium at the top, the body in the middle and the small xiphoid process at the bottom — and anchors the clavicles and the costal cartilages of the upper ribs.'],
+  [/costal cartilage/i, 'Bar of hyaline cartilage joining a rib to the sternum (or to the cartilage above). Its flexibility lets the chest wall expand when you breathe in.'],
+  [/(first|second|third|fourth|fifth|sixth|seventh) rib$/i, 'A "true rib": one of ribs 1–7, which attach directly to the sternum through their own costal cartilage. The ribs protect the heart and lungs and lift up and out as you inhale.'],
+  [/(eighth|ninth|tenth) rib$/i, 'A "false rib": ribs 8–10 join the sternum indirectly, via the costal cartilage of the rib above. They form the lower edge of the rib cage (the costal margin).'],
+  [/(eleventh|twelfth) rib$/i, 'A "floating rib": ribs 11–12 have no attachment to the sternum at all — their tips end in the muscles of the flank.'],
+  [/^atlas$/i, 'C1, the first cervical vertebra. It has no body; it is a ring that supports the skull and allows the nodding ("yes") movement.'],
+  [/^axis$/i, 'C2, the second cervical vertebra. Its upward peg (the dens) sits inside the atlas and acts as the pivot for turning the head ("no" movement).'],
+  [/cervical vertebra/i, 'One of the seven neck vertebrae (C1–C7). They are the smallest vertebrae and have holes in their transverse processes that carry the vertebral arteries to the brain. C7 has the prominent spinous process you can feel at the base of the neck.'],
+  [/thoracic vertebra/i, 'One of the twelve vertebrae of the upper and mid back (T1–T12). Each joins a pair of ribs, which makes this the least mobile part of the spine.'],
+  [/lumbar vertebra/i, 'One of the five large vertebrae of the lower back (L1–L5). They carry most of the upper body\'s weight. The spinal cord ends around L1–L2; below that, nerve roots continue as the cauda equina.'],
+  [/intervertebral disk/i, 'A fibrocartilage cushion between two vertebral bodies: a tough outer ring (annulus fibrosus) around a gel-like core (nucleus pulposus). It absorbs shock and allows the spine to bend; a "slipped disc" is a herniation of the core.'],
+  [/^sacrum$/i, 'Five fused vertebrae forming the back wall of the pelvis. It joins the hip bones at the sacroiliac joints and transmits the weight of the trunk to the legs.'],
+  [/^hip bone$/i, 'The hip bone (os coxae) is three fused bones: the ilium (the flared upper part), the ischium (the part you sit on) and the pubis (the front). Its cup-shaped acetabulum is the socket of the hip joint.'],
+  [/^mandible$/i, 'The lower jaw — the only movable bone of the skull and the strongest bone of the face. It holds the lower teeth and hinges at the temporomandibular joint just in front of each ear.'],
+  [/^maxilla$/i, 'The upper jaw bone. The two maxillae hold the upper teeth, form the hard palate and the floor of the orbits, and contain the large maxillary sinuses.'],
+  [/^frontal bone$/i, 'Forms the forehead and the roofs of the eye sockets. It contains the frontal sinuses and meets the parietal bones at the coronal suture.'],
+  [/^parietal bone$/i, 'The paired bones forming the top and sides of the cranium, joined in the midline at the sagittal suture.'],
+  [/^temporal bone$/i, 'Forms the side and base of the skull around the ear. It houses the middle and inner ear, has the mastoid process behind the ear, and forms the joint with the mandible.'],
+  [/^occipital bone$/i, 'The back and base of the skull. The spinal cord passes through its large opening, the foramen magnum, and its condyles rest on the atlas (C1).'],
+  [/^sphenoid bone$/i, 'A butterfly-shaped bone at the centre of the skull base. Its sella turcica cradles the pituitary gland, and it forms part of each eye socket.'],
+  [/^ethmoid$/i, 'A light, spongy bone between the eye sockets forming the roof of the nasal cavity. Its cribriform plate lets the olfactory (smell) nerves pass into the skull.'],
+  [/^zygomatic bone$/i, 'The cheekbone. It forms the prominence of the cheek and the outer wall of the eye socket.'],
+  [/^nasal bone$/i, 'Small paired bones forming the bridge of the nose; the rest of the nose is cartilage.'],
+  [/^hyoid bone$/i, 'A U-shaped bone in the neck, the only bone that does not touch any other bone. It anchors the tongue and the muscles used in swallowing and speaking.'],
+  [/incisor/i, 'An incisor: a chisel-shaped front tooth for cutting food. Adults have eight (four upper, four lower).'],
+  [/canine tooth/i, 'A canine (eye tooth): a pointed tooth for tearing food, with the longest root of any tooth.'],
+  [/premolar/i, 'A premolar: a two-cusped tooth between the canine and the molars, used for crushing and tearing.'],
+  [/molar tooth/i, 'A molar: a broad, multi-cusped back tooth for grinding food. Adults have up to 12, including wisdom teeth.'],
+  [/^(scaphoid|lunate|triquetral|pisiform|trapezium|trapezoid|capitate|hamate)$/i, 'One of the eight carpal (wrist) bones, arranged in two rows of four. The scaphoid is the most commonly fractured carpal bone.'],
+  [/metacarpal/i, 'A metacarpal: one of the five long bones of the palm, connecting the wrist to the finger bones. Their heads form the knuckles.'],
+  [/phalanx of .*(finger|thumb)/i, 'A phalanx (finger bone). Each finger has three — proximal, middle and distal — and the thumb has two.'],
+  [/phalanx of .*toe/i, 'A phalanx (toe bone). Each toe has three, except the big toe which has two.'],
+  [/^(talus|calcaneus|navicular bone of foot|cuboid bone|.*cuneiform bone)$/i, 'One of the seven tarsal (ankle/hind-foot) bones. The talus forms the ankle joint with the tibia and fibula; the calcaneus is the heel bone, the largest bone of the foot.'],
+  [/metatarsal/i, 'A metatarsal: one of the five long bones of the mid-foot. Together with the tarsals they form the arches of the foot.'],
+  // --- muscular ---
+  [/deltoid/i, 'Part of the deltoid, the rounded muscle capping the shoulder. Its front (clavicular), middle (acromial) and back (spinal) parts raise the arm forward, sideways and backward.'],
+  [/pectoralis major/i, 'Part of the pectoralis major, the large fan-shaped chest muscle. It pulls the arm across the body and rotates it inward — used in pushing and hugging.'],
+  [/pectoralis minor/i, 'A thin triangular muscle under the pectoralis major, pulling the shoulder blade forward and down. Important landmark for the nerves and vessels heading to the arm.'],
+  [/biceps brachii/i, 'Part of the biceps brachii, the two-headed muscle on the front of the upper arm. It bends the elbow and turns the palm upward (supination).'],
+  [/triceps brachii/i, 'Part of the triceps brachii, the three-headed muscle on the back of the arm — the main straightener (extensor) of the elbow.'],
+  [/trapezius/i, 'Part of the trapezius, the large diamond-shaped muscle of the upper back and neck. It shrugs, retracts and rotates the shoulder blades.'],
+  [/sternocleidomastoid/i, 'Runs from the sternum and clavicle to the mastoid process behind the ear. One side turns the head to the opposite side; both together bend the neck forward.'],
+  [/gluteus maximus/i, 'The largest muscle in the body, forming the buttock. It extends and rotates the hip — essential for climbing stairs, running and standing up.'],
+  [/gluteus (medius|minimus)/i, 'A hip abductor on the side of the pelvis. It keeps the pelvis level when you stand on one leg; weakness causes a waddling (Trendelenburg) gait.'],
+  [/^(rectus femoris|vastus)/i, 'One of the four quadriceps muscles on the front of the thigh. They join in the patellar tendon and straighten the knee.'],
+  [/(biceps femoris|semitendinosus|semimembranosus)/i, 'One of the hamstrings on the back of the thigh. They bend the knee and extend the hip, and are commonly strained when sprinting.'],
+  [/gastrocnemius/i, 'Part of the gastrocnemius, the two-headed calf muscle. With the soleus it forms the Achilles tendon and points the foot (plantar flexion).'],
+  [/^soleus$/i, 'A broad, flat calf muscle under the gastrocnemius. It is vital for standing and walking and helps pump blood back up from the legs.'],
+  [/^sartorius$/i, 'The longest muscle in the body, running diagonally across the thigh from hip to knee. It helps cross the legs (flexes, abducts and rotates the hip).'],
+  [/tibialis anterior/i, 'The muscle along the front of the shin that lifts the foot (dorsiflexion). Weakness causes "foot drop".'],
+  [/serratus anterior/i, 'A saw-toothed muscle on the side of the rib cage that holds the shoulder blade against the chest and lets you reach and punch. Paralysis causes a "winged scapula".'],
+  [/external oblique/i, 'The largest and outermost flat abdominal muscle. It flexes and twists the trunk and supports the abdominal organs.'],
+  [/intercostal muscle/i, 'Thin muscles between the ribs that raise and lower the rib cage during breathing. Intercostal nerves and vessels run along the lower edge of each rib.'],
+  [/^calcaneal tendon$/i, 'The Achilles tendon — the thickest and strongest tendon in the body, joining the calf muscles to the heel bone.'],
+  [/^platysma$/i, 'A thin sheet of muscle in the skin of the neck that tenses the neck skin and pulls the corners of the mouth down.'],
+  [/^(superior|inferior|lateral|medial) rectus$|^(superior|inferior) oblique$/i, 'One of the six extra-ocular muscles that move the eyeball. Each is controlled by a cranial nerve (III, IV or VI).'],
+  // --- nervous / senses ---
+  [/precentral gyrus/i, 'The primary motor cortex: it sends the commands for voluntary movement. Each part controls a specific body region (the "motor homunculus"), and the left side controls the right of the body.'],
+  [/postcentral gyrus/i, 'The primary somatosensory cortex: it receives touch, pain, temperature and position information from the opposite side of the body.'],
+  [/superior temporal gyrus/i, 'Contains the primary auditory cortex (hearing). On the left side, its back part (Wernicke\'s area) is essential for understanding language.'],
+  [/inferior frontal gyrus/i, 'On the left side this gyrus contains Broca\'s area, which is essential for producing speech.'],
+  [/(superior|middle) frontal gyrus/i, 'Part of the frontal lobe involved in planning, working memory, attention and voluntary eye movements.'],
+  [/occipital lobe/i, 'The rear lobe of the cerebrum, containing the primary visual cortex that processes everything you see.'],
+  [/(angular|supramarginal) gyrus|superior parietal lobule/i, 'Part of the parietal lobe, integrating touch, vision and language — involved in reading, writing, calculation and awareness of space and the body.'],
+  [/cingulate gyrus/i, 'Part of the limbic system curving over the corpus callosum, involved in emotion, motivation, pain and attention.'],
+  [/(parahippocampal|fusiform) gyrus/i, 'A gyrus on the underside of the temporal lobe; the fusiform gyrus recognises faces and words, the parahippocampal gyrus helps with memory and recognising places.'],
+  [/white matter of cerebral hemisphere/i, 'The white matter of a cerebral hemisphere: bundles of myelinated nerve fibres connecting cortical areas to each other and to deeper brain structures. The model shows it beneath the gyri.'],
+  [/^corpus callosum$/i, 'The largest bundle of nerve fibres in the brain — about 200 million axons connecting the left and right cerebral hemispheres.'],
+  [/^cerebellum$/i, 'The "little brain" at the back of the skull. It coordinates balance, posture and smooth, precise movements, and contains more neurons than the rest of the brain combined.'],
+  [/^thalamus$/i, 'A paired relay station deep in the brain. Almost all sensory information (except smell) passes through it on the way to the cortex.'],
+  [/^hypothalamus$/i, 'A small region below the thalamus that controls body temperature, hunger, thirst, sleep and the pituitary gland — linking the nervous and endocrine systems.'],
+  [/^hippocampus$/i, 'A curved structure in the temporal lobe essential for forming new memories and spatial navigation; one of the first areas damaged in Alzheimer\'s disease.'],
+  [/^amygdala$/i, 'An almond-shaped cluster of nuclei in the temporal lobe that processes emotions, especially fear, and links emotion to memory.'],
+  [/^(midbrain|pons|medulla oblongata)$/i, 'Part of the brainstem, which connects the brain to the spinal cord and controls vital automatic functions — breathing, heart rate, blood pressure and consciousness. Most cranial nerves arise here.'],
+  [/^(caudate nucleus|putamen|globus pallidus)$/i, 'Part of the basal ganglia, deep nuclei that help start and smooth voluntary movement. Their dysfunction causes Parkinson\'s and Huntington\'s disease.'],
+  [/lateral ventricle|third ventricle|fourth ventricle|cerebral aqueduct/i, 'Part of the ventricular system: fluid-filled cavities inside the brain that produce and circulate cerebrospinal fluid (CSF), which cushions the brain and spinal cord.'],
+  [/^spinal cord$/i, 'A cable of nerve tissue about 45 cm long inside the vertebral canal, from the brainstem to about L1–L2. It carries signals between the brain and body, handles reflexes, and gives off 31 pairs of spinal nerves. (Approximate shape: BodyParts3D has no spinal cord, so this one was traced through the real vertebral canal.)'],
+  [/^optic nerve$/i, 'Cranial nerve II: carries visual information from the retina to the brain. The two optic nerves meet at the optic chiasm.'],
+  [/^optic chiasm$/i, 'The X-shaped crossing point of the optic nerves, where fibres from the inner half of each retina cross to the other side of the brain.'],
+  [/^cornea$/i, 'The clear, dome-shaped front of the eye. It provides about two-thirds of the eye\'s focusing power.'],
+  [/^lens$/i, 'The flexible, transparent lens behind the iris. Ciliary muscles change its shape to focus on near or far objects; clouding of the lens is a cataract.'],
+  [/^iris$/i, 'The coloured ring of the eye. Its muscles change the size of the pupil to control how much light enters.'],
+  [/retina/i, 'The light-sensitive layer lining the back of the eye. Rods (dim light) and cones (colour) convert light into nerve signals sent along the optic nerve.'],
+  [/^sclera$/i, 'The tough white outer coat of the eyeball, which protects it and anchors the eye muscles.'],
+  [/^vitreous body$/i, 'The clear gel that fills the space between the lens and the retina, keeping the eyeball\'s shape.'],
+  [/^pineal body$/i, 'A small gland in the middle of the brain that secretes melatonin, regulating the sleep–wake cycle.'],
+  [/nerve/i, 'A nerve: a bundle of nerve fibres carrying signals between the central nervous system and the body — motor commands out to muscles and glands, and sensory information back in.'],
+  // --- cardiovascular ---
+  [/wall of ventricle/i, 'The muscular walls of the heart\'s ventricles (myocardium). The left ventricle wall is about three times thicker than the right because it pumps blood around the whole body.'],
+  [/wall of (left|right) atrium/i, 'The wall of an atrium, one of the two upper receiving chambers of the heart. The right atrium collects blood from the body; the left atrium collects oxygenated blood from the lungs.'],
+  [/cavity of (left|right) (atrium|ventricle)/i, 'The blood-filled interior of a heart chamber (shown as a cast). Blood flows: body → right atrium → right ventricle → lungs → left atrium → left ventricle → aorta.'],
+  [/mitral valve/i, 'Part of the mitral (bicuspid) valve, between the left atrium and left ventricle. It closes as the ventricle contracts so blood goes into the aorta instead of back into the atrium.'],
+  [/tricuspid valve/i, 'Part of the tricuspid valve, between the right atrium and right ventricle. Its three leaflets stop blood flowing backward when the ventricle contracts.'],
+  [/aortic valve/i, 'A cusp of the aortic valve, which lets blood out of the left ventricle into the aorta and stops it flowing back.'],
+  [/pulmonary valve/i, 'A cusp of the pulmonary valve, which lets blood out of the right ventricle into the pulmonary trunk toward the lungs.'],
+  [/papillary muscle/i, 'A papillary muscle: a finger-like muscle inside a ventricle that pulls on the chordae tendineae to stop the valve leaflets flipping back into the atrium.'],
+  [/coronary|cardiac vein|interventricular branch|circumflex branch/i, 'A coronary vessel. The coronary arteries supply the heart muscle itself; blockage of one causes a heart attack (myocardial infarction). Cardiac veins drain into the coronary sinus.'],
+  [/^(ascending aorta|arch of aorta|descending aorta|descending thoracic aorta|abdominal aorta)$/i, 'Part of the aorta, the body\'s largest artery. It leaves the left ventricle, arches over the heart giving off branches to the head and arms, then runs down through the chest and abdomen and splits into the common iliac arteries.'],
+  [/vena cava/i, 'One of the two largest veins. The superior vena cava returns blood from the head, neck and arms; the inferior vena cava from the legs and abdomen. Both empty into the right atrium.'],
+  [/^pulmonary trunk$/i, 'The large artery leaving the right ventricle, which divides into the left and right pulmonary arteries carrying oxygen-poor blood to the lungs.'],
+  [/carotid artery/i, 'A carotid artery: the main blood supply to the head and brain. The common carotid in the neck (where you feel a pulse) divides into internal (brain) and external (face and scalp) branches.'],
+  [/jugular vein/i, 'A jugular vein, draining blood from the brain, face and neck back toward the heart.'],
+  [/femoral artery/i, 'The main artery of the thigh, continuing from the external iliac artery. You can feel its pulse in the groin.'],
+  [/great saphenous vein/i, 'The longest vein in the body, running up the inside of the leg just under the skin. It is often harvested for coronary bypass grafts; when its valves fail it forms varicose veins.'],
+  [/portal vein/i, 'Part of the hepatic portal system, which carries nutrient-rich blood from the intestines, stomach, pancreas and spleen to the liver for processing before it returns to the heart.'],
+  [/renal (artery|vein)/i, 'A renal vessel. The kidneys receive about 20% of the heart\'s output through the renal arteries.'],
+  [/artery|arteries|arterial|arteria/i, 'An artery: a thick, elastic-walled vessel carrying blood away from the heart under high pressure — oxygen-rich, except in the pulmonary arteries.'],
+  [/vein|venous/i, 'A vein: a thin-walled vessel carrying blood back toward the heart. Many veins have one-way valves, and nearby muscle contractions help push blood along.'],
+  // --- respiratory ---
+  [/lung$/i, 'A lung (approximate shape). BodyParts3D does not include lung tissue, so this surface was generated to wrap the real bronchial tree shown inside it. The right lung has three lobes, the left has two plus a notch for the heart. Inside, about 480 million alveoli exchange oxygen and carbon dioxide.'],
+  [/^trachea$/i, 'The windpipe: a 10–12 cm tube held open by 16–20 C-shaped cartilage rings, carrying air from the larynx to the chest, where it divides into the two main bronchi.'],
+  [/main bronchus/i, 'A main bronchus, one of the two branches of the trachea. The right one is wider, shorter and more vertical, so inhaled objects usually go there.'],
+  [/bronchial tree/i, 'A segmental bronchial tree: the airways of one bronchopulmonary segment. Each lung divides into ~10 segments, each a self-contained unit a surgeon can remove separately. Airways branch about 23 times, ending in the alveoli.'],
+  [/^thyroid cartilage$/i, 'The largest laryngeal cartilage, whose front ridge forms the Adam\'s apple. It shields the vocal cords.'],
+  [/^cricoid cartilage$/i, 'The only complete ring of cartilage in the airway, sitting below the thyroid cartilage at the base of the larynx.'],
+  [/^epiglottis$/i, 'A leaf-shaped flap of cartilage that folds down over the larynx during swallowing to keep food and drink out of the airway.'],
+  [/arytenoid cartilage|vocal ligament|vocalis/i, 'Part of the voice box. The arytenoid cartilages pivot to open, close and tension the vocal cords, producing sound as air passes through.'],
+  [/^diaphragm$/i, 'The dome-shaped muscle separating the chest from the abdomen — the main muscle of breathing. It flattens when it contracts, drawing air into the lungs. Supplied by the phrenic nerve (C3–C5).'],
+  // --- digestive ---
+  [/^esophagus$/i, 'A muscular tube about 25 cm long carrying food from the pharynx to the stomach by waves of contraction (peristalsis).'],
+  [/^stomach$/i, 'A J-shaped muscular sac that stores food, churns it with acid and pepsin to begin protein digestion, and releases it gradually into the duodenum through the pyloric sphincter.'],
+  [/^duodenum$/i, 'The first, C-shaped part of the small intestine (about 25 cm). It receives bile from the liver and enzymes from the pancreas.'],
+  [/jejunum/i, 'The jejunum, the middle section of the small intestine, where most nutrients are absorbed through millions of villi.'],
+  [/ileum/i, 'The ileum, the last and longest section of the small intestine. It absorbs vitamin B12 and bile salts before joining the large intestine.'],
+  [/colon|^rectum$|^cecum$/i, 'Part of the large intestine, which absorbs water and salts, hosts trillions of gut bacteria and forms stool. Order: cecum → ascending → transverse → descending → sigmoid colon → rectum.'],
+  [/^appendix$/i, 'A narrow pouch off the cecum containing lymphoid tissue; inflammation (appendicitis) is a common surgical emergency.'],
+  [/hepatovenous segment|caudate lobe of liver/i, 'A segment of the liver. Surgeons divide the liver into 8 functional (Couinaud) segments, each with its own blood supply and bile drainage, so one can be removed without harming the rest. Together they form the largest internal organ (about 1.5 kg).'],
+  [/^gallbladder$/i, 'A small pear-shaped sac under the liver that stores and concentrates bile, squeezing it into the duodenum after fatty meals. Gallstones form here.'],
+  [/biliary|hepatic duct|cystic duct/i, 'Part of the biliary tree — ducts that collect bile made by liver cells and carry it to the gallbladder and duodenum.'],
+  [/pancrea/i, 'Part of the pancreas, a gland behind the stomach. It makes digestive enzymes (sent into the duodenum) and the hormones insulin and glucagon that control blood sugar.'],
+  [/^tongue$/i, 'A muscular organ for tasting, chewing, swallowing and speech. Its surface carries thousands of taste buds.'],
+  [/(submandibular|sublingual) gland/i, 'A salivary gland. Together the salivary glands produce 1–1.5 L of saliva a day, which moistens food and begins starch digestion.'],
+  // --- urinary / reproductive / endocrine / lymphatic ---
+  [/^kidney$/i, 'Bean-shaped organs against the back muscles at about T12–L3; the right sits lower because of the liver. About a million nephrons in each filter ~180 L of plasma a day to make urine and regulate blood pressure, salt balance and pH.'],
+  [/^ureter$/i, 'A muscular tube 25–30 cm long carrying urine from the kidney to the bladder by peristalsis.'],
+  [/^urinary bladder$/i, 'A hollow, stretchy muscular organ behind the pubic bone that stores urine (comfortably 400–600 mL) and empties it through the urethra.'],
+  [/^urethra$/i, 'The tube carrying urine (and in males, semen) out of the body — about 20 cm long in males.'],
+  [/^testis$/i, 'The male gonad, producing sperm and the hormone testosterone. It sits in the scrotum, a few degrees cooler than the body.'],
+  [/^epididymis$/i, 'A tightly coiled tube on the back of each testis where sperm mature and are stored.'],
+  [/deferent duct/i, 'The ductus (vas) deferens, carrying sperm from the epididymis to the urethra; it is the tube cut in a vasectomy.'],
+  [/seminal vesicle/i, 'A gland producing most of the fluid in semen, rich in fructose to fuel sperm.'],
+  [/^prostate$/i, 'A walnut-sized gland below the bladder surrounding the urethra. It adds fluid to semen; enlargement with age can squeeze the urethra.'],
+  [/adrenal gland/i, 'A gland on top of each kidney. Its cortex makes cortisol and aldosterone; its medulla releases adrenaline for the "fight or flight" response.'],
+  [/^pituitary gland$/i, 'The pea-sized "master gland" at the base of the brain, controlling growth, the thyroid, adrenals, reproduction and water balance under direction from the hypothalamus.'],
+  [/^spleen$/i, 'A fist-sized organ in the upper left abdomen that filters blood, removes old red cells and helps fight infection.'],
+  [/thymus/i, 'A lobe of the thymus, the gland behind the sternum where T-lymphocytes mature. Largest in childhood, it is gradually replaced by fat.'],
+  [/^skin$/i, 'The body\'s largest organ (about 2 m²). Its layers — epidermis, dermis and hypodermis — protect against injury and germs, regulate temperature and contain touch, pain and temperature receptors. Shown translucent so you can see inside.'],
+];
+const GENERIC = {
+  skeletal: 'Part of the skeletal system, which supports the body, protects organs, anchors muscles, stores calcium and makes blood cells in the marrow.',
+  muscular: 'A skeletal muscle (or part of one). Muscles move the body by contracting and pulling on bones through their tendons; their names often describe their shape, position or action.',
+  nervous: 'Part of the nervous system or special senses, which detect, transmit and process information and control the body.',
+  cardiovascular: 'Part of the cardiovascular system, which pumps and carries blood — delivering oxygen and nutrients and removing waste.',
+  respiratory: 'Part of the respiratory system, which moves air in and out and exchanges oxygen and carbon dioxide with the blood.',
+  digestive: 'Part of the digestive system, which breaks food down and absorbs nutrients.',
+  urinary: 'Part of the urinary system, which filters blood and removes waste as urine.',
+  reproductive: 'Part of the male reproductive system.',
+  endocrine: 'Part of the endocrine system, which controls the body through hormones released into the blood.',
+  lymphatic: 'Part of the lymphatic and immune system.',
+  integumentary: 'Part of the integumentary system (skin, hair and nails).',
+};
+function describe(P) {
+  for (const [re, text] of DESC) if (re.test(P.name)) return text;
+  return GENERIC[P.system];
+}
+
+/* ------------------------------------------------------------------ *
+ *  Tissue appearance
+ * ------------------------------------------------------------------ */
+function hash(s) { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return (h >>> 0) / 4294967295; }
+function look(P) {
+  const n = P.name.toLowerCase();
+  const L = (c, r = 0.55, extra = {}) => ({ color: c, rough: r, ...extra });
+  switch (P.system) {
+    case 'integumentary':
+      if (/hair|eyebrow/.test(n)) return L('#3a2a1e', 0.9, { opacity: 0.25 });
+      return L('#e2b292', 0.5, { opacity: 0.12 });
+    case 'skeletal':
+      if (/tooth/.test(n)) return L('#f3efe4', 0.25);
+      if (/disk|cartilage|meniscus/.test(n)) return L('#a9cbd6', 0.35);
+      if (/ligament|membrane|retinaculum|tract|linea|raphe/.test(n)) return L('#d9cfb2', 0.5);
+      return L('#e6dcc6', 0.62);
+    case 'muscular': {
+      if (/tendon|aponeurosis/.test(n)) return L('#e8e0cf', 0.4);
+      const j = hash(n);
+      return L(new THREE.Color('#9e3a32').offsetHSL((j - 0.5) * 0.03, 0, (j - 0.5) * 0.09), 0.48);
+    }
+    case 'cardiovascular':
+      if (/valve|chorda/.test(n)) return L('#e7cfb0', 0.4);
+      if (/cavity of/.test(n)) return L(/right/.test(n) ? '#4a5fb0' : '#c0393b', 0.4, { opacity: 0.85 });
+      if (/wall of|papillary/.test(n)) return L('#8f2a2c', 0.45);
+      if (/portal/.test(n)) return L('#7b4fa8', 0.4);
+      if (/pulmonary trunk|pulmonary artery/.test(n)) return L('#3d5dc4', 0.4);
+      if (/pulmonary vein/.test(n)) return L('#cc3333', 0.4);
+      if (/vein|venous|vena|sinus/.test(n)) return L('#2f4fb5', 0.42);
+      return L('#c62828', 0.4);
+    case 'nervous':
+      if (/gyrus|lobule|occipital lobe|insula|cortex/.test(n)) return L(new THREE.Color('#d9aaa6').offsetHSL((hash(n) - 0.5) * 0.04, 0, (hash(n) - 0.5) * 0.06), 0.55);
+      if (/white matter|corpus callosum|internal capsule|fornix|commissure/.test(n)) return L('#efe5da', 0.6);
+      if (/cerebell/.test(n)) return L('#cf9a96', 0.55);
+      if (/thalam|putamen|caudate|pallidus|amygdala|hippocamp|nucleus|geniculate|colliculus|midbrain|pons|medulla|mammillary|peduncle/.test(n)) return L('#c99494', 0.5);
+      if (/ventricle|aqueduct|canal/.test(n)) return L('#6fb6e0', 0.2, { opacity: 0.8 });
+      if (/sclera/.test(n)) return L('#f3f0e8', 0.3);
+      if (/cornea|lens|vitreous|chamber/.test(n)) return L('#cfe6f2', 0.1, { opacity: 0.35 });
+      if (/iris/.test(n)) return L('#4c6d8c', 0.4);
+      if (/retina|choroid/.test(n)) return L('#b0453c', 0.4);
+      if (/lacrimal/.test(n)) return L('#e6b9a0', 0.4);
+      return L('#f2d16b', 0.45);
+    case 'respiratory':
+      if (/lung/.test(n)) return L('#e5a6a4', 0.65, { opacity: 0.45 });
+      if (/diaphragm/.test(n)) return L('#a8443a', 0.5);
+      if (/cartilage|trachea|epiglottis|bronch/.test(n)) return L('#e3d0c4', 0.4);
+      return L('#c9776e', 0.45);
+    case 'digestive':
+      if (/tooth/.test(n)) return L('#f3efe4', 0.25);
+      if (/hepatovenous|liver/.test(n)) return L(new THREE.Color('#6b261c').offsetHSL(0, 0, (hash(n) - 0.5) * 0.05), 0.38);
+      if (/gallbladder|biliary|bile|hepatic duct|cystic/.test(n)) return L('#5f8f3a', 0.35);
+      if (/pancrea/.test(n)) return L('#e3bd85', 0.5);
+      if (/stomach/.test(n)) return L('#d48a7c', 0.4);
+      if (/colon|cecum|rectum|appendix|taenia/.test(n)) return L('#c48568', 0.42);
+      if (/ileum|jejunum|duodenum|ileocecal/.test(n)) return L('#e3a790', 0.4);
+      if (/mesentery|mesocolon|mesoappendix|omentum/.test(n)) return L('#ecd59a', 0.5, { opacity: 0.5 });
+      if (/tongue|lip|gingiva/.test(n)) return L('#c9666a', 0.4);
+      return L('#d99a7c', 0.45);
+    case 'urinary':
+      if (/kidney/.test(n)) return L('#7f3030', 0.4);
+      return L('#d8b25a', 0.4);
+    case 'reproductive': return L('#d4919a', 0.45);
+    case 'endocrine': return L('#b477c9', 0.45);
+    case 'lymphatic': return L(/spleen/.test(n) ? '#6b2a4a' : '#86c7a4', 0.45);
+  }
+  return L(SYSTEMS[P.system].color);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Renderer / scene
+ * ------------------------------------------------------------------ */
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.xr.enabled = true;
+renderer.xr.setReferenceSpaceType('local-floor');
+
+const scene = new THREE.Scene();
+const BG = new THREE.Color(0x0b0f16);
+scene.background = BG;
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.01, 50);
+camera.position.set(0.9, 1.35, 2.3);
+const controls = new OrbitControls(camera, canvas);
+controls.target.set(0, 0.95, 0);
+controls.enableDamping = true;
+controls.minDistance = 0.05;
+controls.maxDistance = 6;
+controls.update();
+
+scene.add(new THREE.HemisphereLight(0xe6eeff, 0x2a2018, 0.55));
+const key = new THREE.DirectionalLight(0xfff4e8, 1.5); key.position.set(1.2, 3, 2.5); scene.add(key);
+const rim = new THREE.DirectionalLight(0x9cc4ff, 0.6); rim.position.set(-2, 2, -2); scene.add(rim);
+
+const floor = new THREE.Group();
+const disc = new THREE.Mesh(new THREE.CircleGeometry(1.4, 64), new THREE.MeshStandardMaterial({ color: 0x141c27, roughness: 1 }));
+disc.rotation.x = -Math.PI / 2; floor.add(disc);
+const grid = new THREE.PolarGridHelper(1.4, 8, 6, 64, 0x26405a, 0x1c2a3a); grid.position.y = 0.002; floor.add(grid);
+scene.add(floor);
+
+const modelRoot = new THREE.Group();
+scene.add(modelRoot);
+const UP = new THREE.Vector3(0, 1, 0);
+const v = (x, y, z) => new THREE.Vector3(x, y, z);
+
+/* ------------------------------------------------------------------ *
+ *  Load model
+ * ------------------------------------------------------------------ */
+const parts = [];
+const pickMeshes = [];
+
+async function fetchWithProgress(url, onProgress) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(url + ': ' + res.status);
+  const total = +res.headers.get('content-length') || 0;
+  if (!res.body || !total) return res.arrayBuffer();
+  const reader = res.body.getReader(); const chunks = []; let got = 0;
+  for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); got += value.length; onProgress(got / total); }
+  const out = new Uint8Array(got); let o = 0; for (const c of chunks) { out.set(c, o); o += c.length; }
+  return out.buffer;
+}
+
+// Body region from the structure's own geometry (mean |x| so left+right pairs still count as limbs)
+function regionOf(pos) {
+  let ax = 0, y = 0; const n = pos.length / 3;
+  for (let i = 0; i < pos.length; i += 3) { ax += Math.abs(pos[i]); y += pos[i + 1]; }
+  ax /= n; y /= n;
+  if (y > 1.43 && ax < 0.13) return 'Head & neck';
+  if (ax > 0.165 && y > 0.6) return 'Upper limb';
+  if (y > 1.43) return 'Head & neck';
+  if (y > 1.185) return 'Thorax';
+  if (y > 1.0) return 'Abdomen';
+  if (y > 0.76 && ax < 0.115) return 'Pelvis';
+  return 'Lower limb';
+}
+
+async function loadModel() {
+  const bar = document.getElementById('loadbar'), txt = document.getElementById('loadtxt');
+  const man = await (await fetch('data/anatomy.json')).json();
+  const bin = await fetchWithProgress('data/anatomy.bin', p => { bar.style.width = (p * 100).toFixed(0) + '%'; txt.textContent = (p * 100).toFixed(0) + '%'; });
+  txt.textContent = 'Building ' + man.items.length + ' structures…';
+  await new Promise(r => setTimeout(r, 0));
+  const lo = man.bounds[0], hi = man.bounds[1];
+  const sc = [0, 1, 2].map(i => (hi[i] - lo[i]) / 65535);
+  for (const it of man.items) {
+    const q = new Uint16Array(bin, it.vOff, it.vCount * 3);
+    const pos = new Float32Array(q.length);
+    for (let i = 0; i < q.length; i += 3) {
+      pos[i] = lo[0] + q[i] * sc[0]; pos[i + 1] = lo[1] + q[i + 1] * sc[1]; pos[i + 2] = lo[2] + q[i + 2] * sc[2];
+    }
+    const idx = it.idx32 ? new Uint32Array(bin, it.iOff, it.iCount) : new Uint16Array(bin, it.iOff, it.iCount);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setIndex(new THREE.BufferAttribute(idx.slice(), 1));
+    geo.computeVertexNormals();
+    geo.computeBoundingSphere(); geo.computeBoundingBox();
+    const P = { id: it.id, name: it.name, system: it.system, region: regionOf(pos), side: it.side, approx: it.approx, fma: it.fma };
+    const lk = look(P);
+    const mat = new THREE.MeshStandardMaterial({ color: new THREE.Color(lk.color), roughness: lk.rough, metalness: 0, envMapIntensity: 0.7 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.userData.part = P;
+    Object.assign(P, { group: mesh, mat, meshes: [mesh], baseOpacity: lk.opacity ?? 1,
+      center: geo.boundingSphere.center.clone(), radius: Math.max(geo.boundingSphere.radius, 0.004), top: geo.boundingBox.max.y });
+    P.desc = describe(P);
+    modelRoot.add(mesh); parts.push(P); pickMeshes.push(mesh);
+  }
+  addSpinalCord();
+  parts.sort((a, b) => a.name.localeCompare(b.name));
+  document.getElementById('loading').remove();
+}
+
+// BodyParts3D has no spinal cord mesh. Trace one through the vertebral canal: in each vertebra (C1 → L2), the
+// largest empty gap along the midline between the vertebral body and the spinous process is the canal.
+function addSpinalCord() {
+  const ORD = ['Atlas', 'Axis', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth', 'Eleventh', 'Twelfth', 'First', 'Second'];
+  const verts = parts.filter(p => p.system === 'skeletal' && (/^(Atlas|Axis)$/.test(p.name) || /(cervical|thoracic) vertebra$/.test(p.name) || /^(First|Second) lumbar vertebra$/.test(p.name)));
+  const pts = [];
+  for (const P of verts) {
+    const pos = P.group.geometry.attributes.position.array, cy = P.center.y, zs = [];
+    for (let i = 0; i < pos.length; i += 3) if (Math.abs(pos[i]) < 0.005 && Math.abs(pos[i + 1] - cy) < 0.008) zs.push(pos[i + 2]);
+    if (zs.length < 4) continue;
+    zs.sort((a, b) => a - b);
+    let best = 0, z = null;
+    for (let i = 1; i < zs.length; i++) if (zs[i] - zs[i - 1] > best) { best = zs[i] - zs[i - 1]; z = (zs[i] + zs[i - 1]) / 2; }
+    if (best > 0.008) pts.push(v(0, cy, z));
+  }
+  pts.sort((a, b) => b.y - a.y);
+  if (pts.length < 6) return;
+  // reject outliers against the local median, then smooth
+  const med = i => { const w = pts.slice(Math.max(0, i - 2), i + 3).map(p => p.z).sort((a, b) => a - b); return w[w.length >> 1]; };
+  const meds = pts.map((_, i) => med(i));
+  for (let i = pts.length - 1; i >= 0; i--) if (Math.abs(pts[i].z - meds[i]) > 0.008) pts.splice(i, 1);
+  for (let pass = 0; pass < 3; pass++) {
+    const z = pts.map(p => p.z);
+    for (let i = 1; i < pts.length - 1; i++) pts[i].z = (z[i - 1] + 2 * z[i] + z[i + 1]) / 4;
+  }
+  const top = pts[0].clone(); top.y += 0.035; pts.unshift(top);                       // up through foramen magnum
+  const end = pts[pts.length - 1].clone(); end.y -= 0.02; pts.push(end);                // conus medullaris
+  const curve = new THREE.CatmullRomCurve3(pts);
+  const geo = new THREE.TubeGeometry(curve, pts.length * 6, 0.0055, 14, false);
+  geo.computeBoundingSphere(); geo.computeBoundingBox();
+  const P = { id: 'cord', name: 'Spinal cord', system: 'nervous', region: 'Thorax', side: 'mid', approx: true, fma: [] };
+  const mat = new THREE.MeshStandardMaterial({ color: '#f1dc9a', roughness: 0.5, envMapIntensity: 0.7 });
+  const mesh = new THREE.Mesh(geo, mat); mesh.userData.part = P;
+  Object.assign(P, { group: mesh, mat, meshes: [mesh], baseOpacity: 1, center: geo.boundingSphere.center.clone(),
+    radius: geo.boundingSphere.radius, top: geo.boundingBox.max.y });
+  P.desc = describe(P);
+  modelRoot.add(mesh); parts.push(P); pickMeshes.push(mesh);
+}
+
+/* ------------------------------------------------------------------ *
+ *  State
+ * ------------------------------------------------------------------ */
+const state = { selected: null, focus: true, isolate: false };
+
+function applyState() {
+  const sel = state.selected;
+  for (const P of parts) {
+    let visible = SYSTEMS[P.system].on && (!state.isolate || !sel || P === sel);
+    if (P === sel) visible = true;
+    let op = P.baseOpacity;
+    if (sel && P !== sel && state.focus && !state.isolate) op = P.system === 'integumentary' ? 0.04 : Math.min(op, 0.1);
+    if (P === sel && op < 0.5) op = 0.6;
+    P.group.visible = visible;
+    const wasT = P.mat.transparent;
+    P.mat.opacity = op;
+    P.mat.transparent = op < 1;
+    P.mat.depthWrite = op >= 1;
+    if (wasT !== P.mat.transparent) P.mat.needsUpdate = true;
+    P.ghost = op < 0.5;
+    if (P !== sel) P.mat.emissive.setRGB(0, 0, 0);
+  }
+  updateLabel();
+  refreshUI();
+}
+
+function select(P, { zoom = false } = {}) {
+  if (state.selected && state.selected !== P) state.selected.mat.emissive.setRGB(0, 0, 0);
+  state.selected = P || null;
+  if (P && !SYSTEMS[P.system].on) SYSTEMS[P.system].on = true;
+  if (P) { vrState.browse = P.system; vrState.region = P.region; }
+  applyState();
+  if (P && zoom) zoomTo(P);
+}
+
+function sideText(P) {
+  return P.side === 'both' ? 'Left & right' : P.side === 'left' ? 'Left side' : P.side === 'right' ? 'Right side' : 'Midline';
+}
+
+/* ---------- floating label ---------- */
+const labelCanvas = document.createElement('canvas'); labelCanvas.width = 1024; labelCanvas.height = 160;
+const labelTex = new THREE.CanvasTexture(labelCanvas); labelTex.colorSpace = THREE.SRGBColorSpace;
+const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: labelTex, depthTest: false, transparent: true }));
+label.renderOrder = 999; label.visible = false; modelRoot.add(label);
+const leaderGeo = new THREE.BufferGeometry().setFromPoints([v(0, 0, 0), v(0, 1, 0)]);
+const leader = new THREE.Line(leaderGeo, new THREE.LineBasicMaterial({ color: 0xffffff, depthTest: false, transparent: true, opacity: 0.8 }));
+leader.renderOrder = 998; leader.visible = false; modelRoot.add(leader);
+function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+
+function updateLabel() {
+  const P = state.selected;
+  if (!P) { label.visible = leader.visible = false; return; }
+  const ctx = labelCanvas.getContext('2d');
+  ctx.clearRect(0, 0, 1024, 160);
+  let fs = 60; ctx.font = `bold ${fs}px system-ui, sans-serif`;
+  while (ctx.measureText(P.name).width > 940 && fs > 30) { fs -= 4; ctx.font = `bold ${fs}px system-ui, sans-serif`; }
+  const w = Math.min(1000, ctx.measureText(P.name).width + 60), x0 = (1024 - w) / 2;
+  ctx.fillStyle = 'rgba(10,16,24,0.88)'; rr(ctx, x0, 20, w, 110, 26); ctx.fill();
+  ctx.strokeStyle = SYSTEMS[P.system].color; ctx.lineWidth = 6; rr(ctx, x0, 20, w, 110, 26); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(P.name, 512, 78, 960);
+  labelTex.needsUpdate = true;
+  const lw = THREE.MathUtils.clamp(P.radius * 0.9, 0.05, 0.36);
+  const ly = P.top + Math.max(0.025, lw * 0.16);
+  label.position.set(P.center.x, ly, P.center.z + 0.04);
+  label.scale.set(lw, lw * 160 / 1024, 1);
+  leader.position.copy(P.center);
+  leaderGeo.setFromPoints([v(0, 0, 0), v(0, ly - lw * 0.06 - P.center.y, 0.04)]);
+  label.visible = leader.visible = true;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Picking
+ * ------------------------------------------------------------------ */
+const raycaster = new THREE.Raycaster();
+function pickPart(ray) {
+  raycaster.ray.copy(ray);
+  const hits = raycaster.intersectObjects(pickMeshes.filter(m => m.visible), false);
+  let ghostHit = null;
+  for (const h of hits) {
+    const P = h.object.userData.part;
+    if (!P.ghost) return { part: P, dist: h.distance, point: h.point };
+    if (!ghostHit && P.system !== 'integumentary') ghostHit = { part: P, dist: h.distance, point: h.point };
+  }
+  return ghostHit;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Desktop UI
+ * ------------------------------------------------------------------ */
+const $ = id => document.getElementById(id);
+const itemEls = new Map();
+const sysEls = {};
+function buildSidebar() {
+  const listEl = $('list');
+  for (const [key, S] of Object.entries(SYSTEMS)) {
+    const items = parts.filter(p => p.system === key);
+    if (!items.length) continue;
+    const d = document.createElement('details');
+    d.innerHTML = `<summary><input type="checkbox" ${S.on ? 'checked' : ''} title="Show / hide this system"><span class="dot" style="background:${S.color}"></span>${S.name}<span class="count">${items.length}</span></summary>`;
+    const cb = d.querySelector('input');
+    cb.addEventListener('click', e => { e.stopPropagation(); S.on = cb.checked; applyState(); });
+    const heads = [];
+    for (const R of REGIONS) {
+      const ri = items.filter(p => p.region === R);
+      if (!ri.length) continue;
+      const h = document.createElement('div'); h.className = 'region'; h.textContent = `${R} (${ri.length})`; d.appendChild(h);
+      const btns = ri.map(P => {
+        const b = document.createElement('button'); b.className = 'item'; b.textContent = P.name;
+        b.onclick = () => select(P, { zoom: true });
+        d.appendChild(b); itemEls.set(P, b); return b;
+      });
+      heads.push({ h, btns });
+    }
+    listEl.appendChild(d); sysEls[key] = { d, cb, heads };
+  }
+}
+$('search').addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  for (const [key, { d, heads }] of Object.entries(sysEls)) {
+    let anyS = false;
+    for (const { h, btns } of heads) {
+      let anyR = false;
+      for (const b of btns) { const m = !q || b.textContent.toLowerCase().includes(q); b.style.display = m ? '' : 'none'; anyR ||= m; }
+      h.style.display = anyR ? '' : 'none'; anyS ||= anyR;
+    }
+    d.style.display = anyS ? '' : 'none';
+    d.open = !!q && anyS;
+  }
+});
+$('tFocus').onclick = () => { state.focus = !state.focus; applyState(); };
+$('tIsolate').onclick = () => { state.isolate = !state.isolate; applyState(); };
+$('iIso').onclick = () => { state.isolate = !state.isolate; applyState(); };
+$('tAll').onclick = showAll;
+$('tHide').onclick = () => $('sidebar').classList.add('collapsed');
+$('menuBtn').onclick = () => $('sidebar').classList.toggle('collapsed');
+$('iZoom').onclick = () => state.selected && zoomTo(state.selected);
+$('iClear').onclick = () => select(null);
+
+function showAll() {
+  for (const S of Object.values(SYSTEMS)) S.on = true;
+  state.isolate = false; select(null); resetView();
+}
+
+let lastSel = null;
+function refreshUI() {
+  $('tFocus').classList.toggle('on', state.focus);
+  $('tIsolate').classList.toggle('on', state.isolate);
+  $('iIso').classList.toggle('on', state.isolate);
+  for (const [key, { cb }] of Object.entries(sysEls)) cb.checked = SYSTEMS[key].on;
+  if (lastSel && itemEls.get(lastSel)) itemEls.get(lastSel).classList.remove('sel');
+  const P = state.selected; lastSel = P;
+  $('info').classList.toggle('hidden', !P);
+  if (P) {
+    const b = itemEls.get(P); b.classList.add('sel');
+    if (!sysEls[P.system].d.open) sysEls[P.system].d.open = true;
+    b.scrollIntoView({ block: 'nearest' });
+    $('iSys').textContent = SYSTEMS[P.system].name; $('iSys').style.background = SYSTEMS[P.system].color;
+    $('iMeta').textContent = `${P.region} · ${sideText(P)}`;
+    $('iName').textContent = P.name; $('iDesc').textContent = P.desc;
+  }
+  drawMenu(); drawInfo();
+}
+
+const ndc = new THREE.Vector2();
+let downXY = null;
+canvas.addEventListener('pointerdown', e => { downXY = [e.clientX, e.clientY]; camTween = null; });
+canvas.addEventListener('pointerup', e => {
+  if (!downXY || renderer.xr.isPresenting || !parts.length) return;
+  if (Math.hypot(e.clientX - downXY[0], e.clientY - downXY[1]) > 5) return;
+  ndc.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+  raycaster.setFromCamera(ndc, camera);
+  const hit = pickPart(raycaster.ray.clone());
+  select(hit ? hit.part : null);
+});
+const tip = $('tip');
+let lastMove = 0;
+canvas.addEventListener('pointermove', e => {
+  const now = performance.now(); if (now - lastMove < 60 || !parts.length) return; lastMove = now;
+  if (e.buttons) { tip.style.display = 'none'; return; }
+  ndc.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+  raycaster.setFromCamera(ndc, camera);
+  const hit = pickPart(raycaster.ray.clone());
+  if (hit) { tip.style.display = 'block'; tip.textContent = hit.part.name; tip.style.left = e.clientX + 14 + 'px'; tip.style.top = e.clientY + 10 + 'px'; canvas.style.cursor = 'pointer'; }
+  else { tip.style.display = 'none'; canvas.style.cursor = ''; }
+});
+canvas.addEventListener('pointerleave', () => tip.style.display = 'none');
+
+let camTween = null;
+function zoomTo(P) {
+  if (renderer.xr.isPresenting) { vrZoomTo(P); return; }
+  const c = P.center.clone().applyMatrix4(modelRoot.matrixWorld);
+  const dist = THREE.MathUtils.clamp(P.radius * 3.4, 0.12, 2.6);
+  const dir = camera.position.clone().sub(controls.target).normalize();
+  if (dir.z < 0.2) dir.set(dir.x, dir.y, 0.6).normalize();
+  camTween = { target: c, pos: c.clone().add(dir.multiplyScalar(dist)) };
+}
+function resetView() {
+  if (renderer.xr.isPresenting) { vrReset(); return; }
+  camTween = { target: v(0, 0.95, 0), pos: v(0.9, 1.35, 2.3) };
+}
+
+/* ------------------------------------------------------------------ *
+ *  VR panels
+ * ------------------------------------------------------------------ */
+class Panel {
+  constructor(w, h, worldW) {
+    this.w = w; this.h = h;
+    this.canvas = document.createElement('canvas'); this.canvas.width = w; this.canvas.height = h;
+    this.ctx = this.canvas.getContext('2d');
+    this.tex = new THREE.CanvasTexture(this.canvas); this.tex.colorSpace = THREE.SRGBColorSpace; this.tex.anisotropy = 4;
+    this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(worldW, worldW * h / w), new THREE.MeshBasicMaterial({ map: this.tex, transparent: true, toneMapped: false }));
+    this.mesh.userData.panel = this;
+    this.buttons = []; this.hover = new Set();
+  }
+  btnAt(uv) { const x = uv.x * this.w, y = (1 - uv.y) * this.h; return this.buttons.find(b => x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h); }
+  button(id, x, y, w, h, text, { on = false, color = null, align = 'center', size = 30, onClick }) {
+    const c = this.ctx, hov = this.hover.has(id);
+    c.fillStyle = on ? '#5ec2ff' : hov ? '#24364a' : '#162130'; rr(c, x, y, w, h, 14); c.fill();
+    c.strokeStyle = hov ? '#5ec2ff' : '#2a3a4f'; c.lineWidth = 3; rr(c, x, y, w, h, 14); c.stroke();
+    let tx = align === 'left' ? x + 22 : x + w / 2;
+    if (color) { c.fillStyle = color; c.beginPath(); c.arc(x + 26, y + h / 2, 11, 0, 7); c.fill(); if (align === 'left') tx = x + 50; }
+    c.fillStyle = on ? '#06131d' : '#e7edf5'; c.font = `600 ${size}px system-ui, sans-serif`;
+    c.textAlign = align; c.textBaseline = 'middle'; c.fillText(text, tx, y + h / 2 + 1, w - (tx - x) - 12);
+    this.buttons.push({ id, x, y, w, h, onClick });
+  }
+  frame() {
+    const c = this.ctx; this.buttons = [];
+    c.clearRect(0, 0, this.w, this.h);
+    c.fillStyle = 'rgba(12,17,25,0.95)'; rr(c, 0, 0, this.w, this.h, 36); c.fill();
+    c.strokeStyle = '#2a3a4f'; c.lineWidth = 4; rr(c, 2, 2, this.w - 4, this.h - 4, 34); c.stroke();
+  }
+}
+
+const vrUI = new THREE.Group(); vrUI.visible = false; scene.add(vrUI);
+const menu = new Panel(1024, 1600, 0.6);
+const infoP = new Panel(1024, 820, 0.62);
+menu.mesh.position.set(-0.78, 1.3, -0.6); menu.mesh.rotation.y = 0.75;
+infoP.mesh.position.set(0.78, 1.38, -0.6); infoP.mesh.rotation.y = -0.75;
+vrUI.add(menu.mesh, infoP.mesh);
+const panels = [menu, infoP];
+const vrState = { browse: 'skeletal', region: 'Head & neck', page: 0 };
+const PER_PAGE = 10;
+
+function drawMenu() {
+  const p = menu, c = p.ctx; p.frame();
+  c.fillStyle = '#fff'; c.font = 'bold 46px system-ui, sans-serif'; c.textAlign = 'left'; c.textBaseline = 'middle';
+  c.fillText('Anatomy Explorer', 40, 58);
+  c.fillStyle = '#93a1b5'; c.font = '26px system-ui, sans-serif';
+  c.fillText('Tap a system to browse · 👁 shows / hides it', 40, 104);
+  const keys = Object.keys(SYSTEMS);
+  keys.forEach((k, i) => {
+    const col = i % 2, row = Math.floor(i / 2), x = 30 + col * 487, y = 132 + row * 76, S = SYSTEMS[k];
+    p.button('sys:' + k, x, y, 380, 66, S.name, { on: vrState.browse === k, color: S.color, align: 'left', size: 27,
+      onClick: () => { vrState.browse = k; vrState.page = 0; const rs = regionsOf(k); if (!rs.includes(vrState.region)) vrState.region = rs[0]; drawMenu(); } });
+    p.button('eye:' + k, x + 390, y, 87, 66, S.on ? '👁' : '—', { on: S.on, size: 32, onClick: () => { S.on = !S.on; applyState(); } });
+  });
+  const regs = regionsOf(vrState.browse);
+  if (!regs.includes(vrState.region)) vrState.region = regs[0];
+  const yR = 132 + 6 * 76 + 8;
+  const rw = (p.w - 60 - (regs.length - 1) * 8) / Math.max(regs.length, 1);
+  regs.forEach((R, i) => p.button('reg:' + R, 30 + i * (rw + 8), yR, rw, 56, R, { on: vrState.region === R, size: 22,
+    onClick: () => { vrState.region = R; vrState.page = 0; drawMenu(); } }));
+  const items = parts.filter(P => P.system === vrState.browse && P.region === vrState.region);
+  const pages = Math.max(1, Math.ceil(items.length / PER_PAGE));
+  vrState.page = Math.min(vrState.page, pages - 1);
+  const y0 = yR + 96;
+  c.fillStyle = SYSTEMS[vrState.browse].color; c.font = 'bold 30px system-ui, sans-serif'; c.textAlign = 'left';
+  c.fillText(`${vrState.region} — ${items.length} structures`, 40, y0 - 18);
+  c.fillStyle = '#93a1b5'; c.font = '26px system-ui, sans-serif'; c.textAlign = 'right';
+  c.fillText(`page ${vrState.page + 1} / ${pages}`, p.w - 40, y0 - 18);
+  items.slice(vrState.page * PER_PAGE, vrState.page * PER_PAGE + PER_PAGE).forEach((P, i) => {
+    p.button('part:' + P.id, 30, y0 + i * 62, p.w - 60, 54, P.name, { on: state.selected === P, align: 'left', size: 27,
+      onClick: () => select(P, { zoom: true }) });
+  });
+  const yNav = y0 + PER_PAGE * 62 + 6;
+  p.button('prev', 30, yNav, 470, 60, '◀  Prev', { onClick: () => { vrState.page = (vrState.page - 1 + pages) % pages; drawMenu(); } });
+  p.button('next', 524, yNav, 470, 60, 'Next  ▶', { onClick: () => { vrState.page = (vrState.page + 1) % pages; drawMenu(); } });
+  const yA = yNav + 80;
+  p.button('focus', 30, yA, 310, 62, 'X-ray focus', { on: state.focus, onClick: () => { state.focus = !state.focus; applyState(); } });
+  p.button('iso', 357, yA, 310, 62, 'Isolate', { on: state.isolate, onClick: () => { state.isolate = !state.isolate; applyState(); } });
+  p.button('all', 684, yA, 310, 62, 'Show all', { onClick: showAll });
+  const yB = yA + 74;
+  p.button('rotL', 30, yB, 230, 62, '⟲ Rotate', { onClick: () => vrRotate(-Math.PI / 4) });
+  p.button('rotR', 275, yB, 230, 62, 'Rotate ⟳', { onClick: () => vrRotate(Math.PI / 4) });
+  p.button('zoom', 520, yB, 230, 62, 'Zoom to', { onClick: () => state.selected && vrZoomTo(state.selected) });
+  p.button('reset', 765, yB, 229, 62, 'Reset', { onClick: vrReset });
+  p.tex.needsUpdate = true;
+}
+function regionsOf(sys) { return REGIONS.filter(R => parts.some(P => P.system === sys && P.region === R)); }
+
+function wrap(c, text, x, y, maxW, lh, maxLines) {
+  const words = text.split(' '); let line = '', n = 0;
+  for (const w of words) {
+    const t = line ? line + ' ' + w : w;
+    if (c.measureText(t).width > maxW && line) { c.fillText(line, x, y + n * lh); line = w; if (++n >= maxLines) return n; }
+    else line = t;
+  }
+  if (line) c.fillText(line, x, y + n * lh);
+  return n + 1;
+}
+
+function drawInfo() {
+  const p = infoP, c = p.ctx; p.frame();
+  const P = state.selected;
+  c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+  if (!P) {
+    c.fillStyle = '#fff'; c.font = 'bold 44px system-ui, sans-serif'; c.fillText('Point & pull the trigger', 44, 100);
+    c.fillStyle = '#c9d3df'; c.font = '30px system-ui, sans-serif';
+    wrap(c, 'Aim your controller ray at any structure and press the trigger to identify it. Use the menu on the left to browse over 1,000 structures by system and body region. Right thumbstick: rotate (left/right) and move the model (forward/back). Left thumbstick: raise/lower (up/down) and resize (left/right). Hand-tracking: pinch to select.', 44, 160, p.w - 88, 44, 12);
+  } else {
+    const S = SYSTEMS[P.system];
+    c.font = 'bold 26px system-ui, sans-serif'; const tw = c.measureText(S.name.toUpperCase()).width + 36;
+    c.fillStyle = S.color; rr(c, 44, 36, tw, 46, 23); c.fill();
+    c.fillStyle = '#06131d'; c.fillText(S.name.toUpperCase(), 62, 68);
+    c.fillStyle = '#93a1b5'; c.font = '26px system-ui, sans-serif'; c.fillText(`${P.region} · ${sideText(P)}`, 44 + tw + 18, 68);
+    c.fillStyle = '#fff'; c.font = 'bold 48px system-ui, sans-serif';
+    const lines = wrap(c, P.name, 44, 150, p.w - 88, 56, 2);
+    c.fillStyle = '#d3dbe6'; c.font = '30px system-ui, sans-serif';
+    wrap(c, P.desc, 44, 150 + lines * 56 + 30, p.w - 88, 42, 11);
+    p.button('clear', p.w - 254, p.h - 88, 210, 60, 'Clear', { onClick: () => select(null) });
+    p.button('zoom2', p.w - 484, p.h - 88, 210, 60, 'Zoom to', { onClick: () => vrZoomTo(P) });
+  }
+  p.tex.needsUpdate = true;
+}
+
+/* ---------- VR model transform ---------- */
+const VR_HOME = { pos: v(0, 0, -1.0), rot: 0, scale: 1 };
+let modelTween = null;
+function vrReset() { modelTween = { pos: VR_HOME.pos.clone(), rot: VR_HOME.rot, scale: 1 }; }
+function vrRotate(d) { modelTween = { pos: modelRoot.position.clone(), rot: modelRoot.rotation.y + d, scale: modelRoot.scale.x }; }
+function vrZoomTo(P) {
+  const S = THREE.MathUtils.clamp(0.12 / P.radius, 1, 6);
+  const rot = modelRoot.rotation.y;
+  const local = P.center.clone().multiplyScalar(S).applyAxisAngle(UP, rot);
+  modelTween = { pos: v(0, 1.3, -0.55).sub(local), rot, scale: S };
+}
+
+/* ------------------------------------------------------------------ *
+ *  VR controllers
+ * ------------------------------------------------------------------ */
+const ctrlFactory = new XRControllerModelFactory();
+const controllers = [];
+const tmpMat = new THREE.Matrix4();
+for (let i = 0; i < 2; i++) {
+  const ctrl = renderer.xr.getController(i);
+  const rayGeo = new THREE.BufferGeometry().setFromPoints([v(0, 0, 0), v(0, 0, -1)]);
+  const ray = new THREE.Line(rayGeo, new THREE.LineBasicMaterial({ color: 0x5ec2ff, transparent: true, opacity: 0.8 }));
+  ray.scale.z = 3; ctrl.add(ray);
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(0.005, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false }));
+  dot.renderOrder = 1000; dot.visible = false; scene.add(dot);
+  const C = { ctrl, ray, dot, hit: null, partHit: null };
+  ctrl.addEventListener('selectstart', () => onVRSelect(C));
+  ctrl.addEventListener('connected', e => { C.handedness = e.data.handedness; ray.visible = e.data.targetRayMode !== 'gaze'; });
+  scene.add(ctrl);
+  const grip = renderer.xr.getControllerGrip(i);
+  grip.add(ctrlFactory.createControllerModel(grip));
+  scene.add(grip);
+  controllers.push(C);
+}
+function controllerRay(C) {
+  tmpMat.identity().extractRotation(C.ctrl.matrixWorld);
+  const r = new THREE.Ray();
+  r.origin.setFromMatrixPosition(C.ctrl.matrixWorld);
+  r.direction.set(0, 0, -1).applyMatrix4(tmpMat);
+  return r;
+}
+function castVR(C, withParts) {
+  const r = controllerRay(C);
+  raycaster.ray.copy(r);
+  const ph = raycaster.intersectObjects(panels.map(p => p.mesh), false)[0];
+  let best = null;
+  if (ph) { const btn = ph.object.userData.panel.btnAt(ph.uv); best = { type: 'panel', panel: ph.object.userData.panel, btn, dist: ph.distance, point: ph.point }; }
+  if (withParts) C.partHit = pickPart(r);
+  const pp = C.partHit;
+  if (pp && (!best || pp.dist < best.dist)) best = { type: 'part', part: pp.part, dist: pp.dist, point: pp.point };
+  return best;
+}
+function onVRSelect(C) {
+  const h = castVR(C, true);
+  if (!h) return;
+  if (h.type === 'panel') { h.btn && h.btn.onClick(); }
+  else select(h.part);
+}
+let frameNo = 0;
+function updateControllers() {
+  frameNo++;
+  const hovered = new Map(panels.map(p => [p, new Set()]));
+  controllers.forEach((C, i) => {
+    const h = castVR(C, (frameNo + i) % 4 === 0);  // part ray-casts are throttled; panels every frame
+    if (h) {
+      C.ray.scale.z = h.dist; C.dot.position.copy(h.point); C.dot.visible = true;
+      if (h.type === 'panel' && h.btn) hovered.get(h.panel).add(h.btn.id);
+    } else { C.ray.scale.z = 3; C.dot.visible = false; }
+  });
+  for (const p of panels) {
+    const nh = hovered.get(p);
+    if (nh.size !== p.hover.size || [...nh].some(id => !p.hover.has(id))) { p.hover = nh; p === menu ? drawMenu() : drawInfo(); }
+  }
+}
+function handleGamepads(dt) {
+  const session = renderer.xr.getSession(); if (!session) return;
+  for (const src of session.inputSources) {
+    const gp = src.gamepad; if (!gp || gp.axes.length < 4) continue;
+    const ax = Math.abs(gp.axes[2]) > 0.15 ? gp.axes[2] : 0;
+    const ay = Math.abs(gp.axes[3]) > 0.15 ? gp.axes[3] : 0;
+    if (!ax && !ay) continue;
+    modelTween = null;
+    if (src.handedness === 'right') {
+      modelRoot.rotation.y += ax * dt * 1.6;
+      modelRoot.position.z += ay * dt * 0.8;
+    } else {
+      modelRoot.position.y -= ay * dt * 0.6;
+      modelRoot.scale.setScalar(THREE.MathUtils.clamp(modelRoot.scale.x * (1 + ax * dt * 0.9), 0.3, 8));
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Enter VR / AR
+ * ------------------------------------------------------------------ */
+const btnVR = $('btnVR'), btnAR = $('btnAR'), xrmsg = $('xrmsg');
+let currentMode = null;
+async function initXR() {
+  if (!('xr' in navigator)) {
+    btnVR.textContent = 'VR not available';
+    xrmsg.textContent = window.isSecureContext ? 'Open this page in your VR headset\'s browser (e.g. Meta Quest Browser) to enter VR.'
+      : 'WebXR needs a secure (https://) page. Host this folder on HTTPS to use it in VR.';
+    return;
+  }
+  const [vr, ar] = await Promise.all([
+    navigator.xr.isSessionSupported('immersive-vr').catch(() => false),
+    navigator.xr.isSessionSupported('immersive-ar').catch(() => false)]);
+  if (vr) { btnVR.disabled = false; btnVR.textContent = 'Enter VR'; btnVR.onclick = () => startXR('immersive-vr'); }
+  else { btnVR.textContent = 'VR not supported here'; xrmsg.textContent = 'Open this page in your VR headset\'s browser to enter VR.'; }
+  if (ar) { btnAR.style.display = ''; btnAR.disabled = false; btnAR.onclick = () => startXR('immersive-ar'); }
+}
+async function startXR(mode) {
+  if (renderer.xr.isPresenting) { renderer.xr.getSession().end(); return; }
+  try {
+    const session = await navigator.xr.requestSession(mode, { optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking'] });
+    currentMode = mode;
+    session.addEventListener('end', onXREnd);
+    await renderer.xr.setSession(session);
+    onXRStart();
+  } catch (err) { xrmsg.textContent = 'Could not start ' + mode + ': ' + err.message; }
+}
+function onXRStart() {
+  vrUI.visible = true;
+  scene.background = currentMode === 'immersive-ar' ? null : BG;
+  floor.visible = currentMode !== 'immersive-ar';
+  modelRoot.position.copy(VR_HOME.pos); modelRoot.rotation.y = 0; modelRoot.scale.setScalar(1);
+  btnVR.textContent = 'Exit VR';
+  drawMenu(); drawInfo();
+}
+function onXREnd() {
+  vrUI.visible = false; scene.background = BG; floor.visible = true;
+  modelRoot.position.set(0, 0, 0); modelRoot.rotation.y = 0; modelRoot.scale.setScalar(1); modelTween = null;
+  for (const C of controllers) C.dot.visible = false;
+  btnVR.textContent = 'Enter VR';
+}
+
+/* ------------------------------------------------------------------ *
+ *  Loop
+ * ------------------------------------------------------------------ */
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
+  if (renderer.xr.isPresenting) {
+    handleGamepads(dt);
+    if (modelTween) {
+      const k = 1 - Math.pow(0.002, dt);
+      modelRoot.position.lerp(modelTween.pos, k);
+      modelRoot.rotation.y += (modelTween.rot - modelRoot.rotation.y) * k;
+      modelRoot.scale.setScalar(modelRoot.scale.x + (modelTween.scale - modelRoot.scale.x) * k);
+      if (modelRoot.position.distanceTo(modelTween.pos) < 0.001 && Math.abs(modelTween.rot - modelRoot.rotation.y) < 0.001) modelTween = null;
+    }
+    modelRoot.updateMatrixWorld(true);
+    updateControllers();
+  } else {
+    if (camTween) {
+      const k = 1 - Math.pow(0.004, dt);
+      controls.target.lerp(camTween.target, k); camera.position.lerp(camTween.pos, k);
+      if (camera.position.distanceTo(camTween.pos) < 0.002) camTween = null;
+    }
+    controls.update();
+  }
+  if (state.selected) {
+    const pulse = 0.18 + 0.14 * Math.sin(t * 4);
+    state.selected.mat.emissive.copy(state.selected.mat.color).multiplyScalar(pulse);
+  }
+  renderer.render(scene, camera);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+if (innerWidth < 760) $('sidebar').classList.add('collapsed');
+
+loadModel().then(() => {
+  buildSidebar();
+  applyState();
+  initXR();
+  window.__anatomy = { parts, select, state, menu, infoP, SYSTEMS, applyState, camera, controls, renderer, scene, getTween: () => camTween };
+}).catch(err => {
+  document.getElementById('loadtxt').textContent = 'Failed to load model: ' + err.message;
+  console.error(err);
+});
+</script>
+</body>
+</html>

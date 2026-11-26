@@ -9,6 +9,7 @@
   --accent: #c8471f;
   --accent-soft: rgba(200, 71, 31, 0.35);
   --pass: #2d7a46;
+  --model: #c9ced6;
   --serif: "Instrument Serif", Georgia, serif;
   --sans: "IBM Plex Sans", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -25,6 +26,7 @@
     --accent: #ef7a4f;
     --accent-soft: rgba(239, 122, 79, 0.4);
     --pass: #6bc58a;
+    --model: #aeb6c2;
   }
 }
 
@@ -204,6 +206,28 @@ footer {
 
 .links-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 48px; }
 
+/* 3D model viewer */
+.model-viewer {
+  position: relative; height: 480px; cursor: grab;
+  background: radial-gradient(circle at 50% 40%, var(--card), var(--paper-2));
+}
+.model-viewer:active { cursor: grabbing; }
+.model-viewer canvas { display: block; width: 100% !important; height: 100% !important; }
+.model-viewer::after {
+  content: "Drag to rotate · scroll to zoom"; position: absolute; left: 12px; bottom: 10px;
+  font: 400 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2);
+}
+.viewer-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.viewer-pair .model-viewer { height: 420px; }
+
+/* category headers on home */
+.category { border-top: 1px solid var(--ink); padding-top: 28px; }
+.category + .category { margin-top: 96px; }
+.category-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 36px; }
+.category-head .section-title { margin: 0; }
+.category-head p { color: var(--ink-2); max-width: 46ch; margin: 0; font-size: 16px; }
+.card-links { display: flex; gap: 18px; flex-wrap: wrap; }
+
 /* lightbox */
 dialog#lightbox { border: 0; padding: 0; background: transparent; max-width: min(92vw, 1100px); }
 dialog#lightbox::backdrop { background: rgba(10, 14, 20, 0.88); }
@@ -217,6 +241,7 @@ dialog#lightbox button { position: fixed; top: 16px; right: 20px; background: no
   .spec-cell:nth-child(2) { border-right: 0; }
   .spec-cell:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
   .media-grid.three { grid-template-columns: repeat(2, 1fr); }
+  .viewer-pair { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
   nav.top { padding: 14px 16px; }
@@ -227,4 +252,5 @@ dialog#lightbox button { position: fixed; top: 16px; right: 20px; background: no
   .spec-panel { grid-template-columns: 1fr; }
   .spec-cell { border-right: 0; border-bottom: 1px solid var(--rule); }
   .spec-cell:last-child { border-bottom: 0; }
+  .model-viewer, .viewer-pair .model-viewer { height: 340px; }
 }

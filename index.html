@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Luke Leininger — Portfolio</title>
-<meta name="description" content="Engineering projects by Luke Leininger, biomedical engineering student at Duke University: medical devices, lab instrumentation and competition robotics.">
+<meta name="description" content="Engineering projects by Luke Leininger, biomedical engineering student at Duke University: prototypes, software builds and robotics.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -15,100 +15,141 @@
 <nav class="top">
   <a class="logo" href="#top">LL // Index</a>
   <ul>
-    <li><a href="#projects">Projects</a></li>
+    <li><a href="#prototypes">Prototypes</a></li>
+    <li><a href="#software">Software</a></li>
+    <li><a href="#robotics">Robotics</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
 <section class="hero" id="top">
   <div class="hero-inner">
-    <span class="hero-eyebrow">Sheet 01 / 03 — Title block</span>
+    <span class="hero-eyebrow">Sheet 01 / 05 — Title block</span>
     <h1>Luke Leininger<em>Biomedical Engineering</em></h1>
-    <p class="hero-bio">I'm a student at <b>Duke University</b> studying <b>Biomedical Engineering</b>. I like the part of engineering where hardware meets people — <b>medical devices</b>, <b>lab instruments</b> and <b>robots</b> that have to work for real users on a real budget. I CAD in Onshape and Fusion 360, wire with Raspberry Pi, and code in Python, Java and C++.</p>
+    <p class="hero-bio">I'm a student at <b>Duke University</b> studying <b>Biomedical Engineering</b>. I build where hardware, software and people meet: <b>medical device prototypes</b>, <b>health software</b> and <b>robots</b> that have to work for real users on a real budget.</p>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="#projects">View projects →</a>
+      <a class="btn btn-primary" href="#prototypes">View projects →</a>
       <a class="btn btn-ghost" href="#contact">Contact ↴</a>
     </div>
   </div>
 </section>
 
-<section class="section" id="projects">
-  <p class="label">Sheet 02 / 03 — Project drawings</p>
-  <h2 class="section-title">Featured Projects</h2>
+<div class="section">
 
-  <div class="grid">
-    <article class="card">
-      <span class="dwg">DWG. LL-01</span>
-      <a class="card-img contain" href="adhd.html"><img src="assets/img/adhd-cad.jpg" alt="Exploded CAD of the ADHD medication reminder device"></a>
-      <div class="card-body">
-        <div class="tags"><span class="tag">Raspberry Pi</span><span class="tag">Flask</span><span class="tag">3D printing</span></div>
-        <h3>ADHD Medication Reminder System</h3>
-        <p>A portable pill station that reminds adults with ADHD to take their medication with lights, sound and an LCD, and logs each dose to a companion website.</p>
-        <a class="card-link" href="adhd.html">↗ View project</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="dwg">DWG. LL-02</span>
-      <a class="card-img contain" href="porometer.html"><img src="assets/img/tteb-section.jpg" alt="Section-view CAD of the capillary flow porometer"></a>
-      <div class="card-body">
-        <div class="tags"><span class="tag">CAD</span><span class="tag">Instrumentation</span><span class="tag">Tissue</span></div>
-        <h3>Capillary Flow Porometer</h3>
-        <p>A bench instrument that measures the pore size of tissue samples by pushing air through them and tracking how flow responds to pressure.</p>
-        <a class="card-link" href="porometer.html">↗ View project</a>
-      </div>
-    </article>
-
-    <article class="card">
-      <span class="dwg">DWG. LL-03</span>
-      <div class="card-img placeholder">In progress</div>
-      <div class="card-body">
-        <div class="tags"><span class="tag">Onshape</span><span class="tag">Medical device</span><span class="tag">Global health</span></div>
-        <h3>Low-Cost Endoscopy Anchor</h3>
-        <p>With Duke MEDesign: designing an affordable alternative to commercial endoscopy anchors for low-income communities and low-resource health systems.</p>
-        <span class="card-link muted">Sep 2025 – present</span>
-      </div>
-    </article>
-  </div>
-
-  <div class="appendix">
-    <p class="label">Appendix — Earlier work</p>
-    <h3>High School Robotics</h3>
-    <p>Four seasons on FIRST Tech Challenge Team 516 Gears of Fire, finishing as Head of CAD. This is where I learned to design, build, break and rebuild things.</p>
-    <div class="grid small">
+  <section class="category" id="prototypes">
+    <p class="label">Sheet 02 / 05 — Prototypes</p>
+    <div class="category-head">
+      <h2 class="section-title">Prototypes</h2>
+      <p>Physical devices for the lab and the clinic, designed in CAD.</p>
+    </div>
+    <div class="grid">
       <article class="card">
-        <span class="dwg">DWG. HS-01</span>
+        <span class="dwg">DWG. P-01</span>
+        <a class="card-img contain" href="porometer.html"><img src="assets/img/tteb-section.jpg" alt="Section-view CAD of the capillary flow porometer"></a>
+        <div class="card-body">
+          <div class="tags"><span class="tag">CAD</span><span class="tag">Instrumentation</span><span class="tag">Tissue</span></div>
+          <h3>Capillary Flow Porometer</h3>
+          <p>A bench instrument that measures the pore size of tissue samples by pushing air through them and tracking how flow responds to pressure.</p>
+          <a class="card-link" href="porometer.html">↗ View project</a>
+        </div>
+      </article>
+      <article class="card">
+        <span class="dwg">DWG. P-02</span>
+        <a class="card-img" href="endoscopy-anchor.html"><img src="assets/img/anchor-pair.jpg" alt="Renders of the two endoscopy anchor design concepts"></a>
+        <div class="card-body">
+          <div class="tags"><span class="tag">Onshape</span><span class="tag">Medical device</span><span class="tag">3D viewer</span></div>
+          <h3>Low-Cost Endoscopy Anchor</h3>
+          <p>With Duke MEDesign: two concepts for an affordable endoscopy anchor for low-resource health systems. You can rotate both models in 3D.</p>
+          <a class="card-link" href="endoscopy-anchor.html">↗ View project</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="category" id="software">
+    <p class="label">Sheet 03 / 05 — Software builds</p>
+    <div class="category-head">
+      <h2 class="section-title">Software Builds</h2>
+      <p>Tools for learning anatomy and for keeping patient data straight.</p>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <span class="dwg">DWG. S-01</span>
+        <a class="card-img" href="vr-anatomy.html"><img src="assets/img/vr-explore.jpg" alt="Anatomy Explorer VR with the structures panel open"></a>
+        <div class="card-body">
+          <div class="tags"><span class="tag">three.js</span><span class="tag">WebXR</span><span class="tag">VR</span></div>
+          <h3>Anatomy Explorer VR</h3>
+          <p>A full human body you can explore in a VR headset's browser, with 1,021 labeled structures, X-ray focus and point-to-identify.</p>
+          <div class="card-links">
+            <a class="card-link" href="vr-anatomy.html">↗ View project</a>
+            <a class="card-link" href="demos/vr-anatomy/" target="_blank" rel="noopener">▶ Live demo</a>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <span class="dwg">DWG. S-02</span>
+        <a class="card-img" href="rehab-hub.html"><img src="assets/img/rehab-model.jpg" alt="Rehab Data Hub progress model with recovery curves"></a>
+        <div class="card-body">
+          <div class="tags"><span class="tag">Python</span><span class="tag">ML</span><span class="tag">AI Q&amp;A</span></div>
+          <h3>Rehab Data Hub</h3>
+          <p>A shared rehab record across hospitals that flags contradictions, trains a recovery model for each patient, and answers questions from that patient's records only.</p>
+          <a class="card-link" href="rehab-hub.html">↗ View project</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="category" id="robotics">
+    <p class="label">Sheet 04 / 05 — Robotics</p>
+    <div class="category-head">
+      <h2 class="section-title">Robotics</h2>
+      <p>Embedded devices and competition robots: sensors, motors, and code that has to work on the first try.</p>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <span class="dwg">DWG. R-01</span>
+        <a class="card-img contain" href="adhd.html"><img src="assets/img/adhd-cad.jpg" alt="Exploded CAD of the ADHD medication reminder device"></a>
+        <div class="card-body">
+          <div class="tags"><span class="tag">Raspberry Pi</span><span class="tag">Flask</span><span class="tag">3D printing</span></div>
+          <h3>ADHD Medication Reminder System</h3>
+          <p>A portable pill station that reminds adults with ADHD to take their medication with lights, sound and an LCD, and logs each dose to a companion website.</p>
+          <a class="card-link" href="adhd.html">↗ View project</a>
+        </div>
+      </article>
+      <article class="card">
+        <span class="dwg">DWG. R-02</span>
         <a class="card-img" href="into-the-deep.html"><img src="assets/img/itd-robot.jpg" alt="Into the Deep robot with slides extended" style="object-position: center 30%"></a>
         <div class="card-body">
           <div class="tags"><span class="tag">Fusion 360</span><span class="tag">Java</span><span class="tag">RoadRunner</span></div>
-          <h3>Custom Robot: <i>Into the Deep</i></h3>
-          <p>2024–25. Our first fully custom robot, with four-stage slides, a 360° claw and a worm-gear hang. I was Head of CAD.</p>
+          <h3>FTC Robot: <i>Into the Deep</i></h3>
+          <p>2024–25, high school. Our first fully custom robot, with four-stage slides, a 360° claw and a worm-gear hang. I was Head of CAD.</p>
           <a class="card-link" href="into-the-deep.html">↗ View project</a>
         </div>
       </article>
       <article class="card">
-        <span class="dwg">DWG. HS-02</span>
+        <span class="dwg">DWG. R-03</span>
         <a class="card-img" href="centerstage.html"><img src="assets/img/cs-robot.jpg" alt="CenterStage competition robot"></a>
         <div class="card-body">
           <div class="tags"><span class="tag">OpenCV</span><span class="tag">3D printing</span><span class="tag">Odometry</span></div>
-          <h3>Robot: <i>CenterStage</i></h3>
-          <p>2023–24. A fast-cycling robot that set a temporary Florida state record of 267 points and reached the FIRST World Championship.</p>
+          <h3>FTC Robot: <i>CenterStage</i></h3>
+          <p>2023–24, high school. A fast-cycling robot that set a temporary Florida state record of 267 points and reached the FIRST World Championship.</p>
           <a class="card-link" href="centerstage.html">↗ View project</a>
         </div>
       </article>
     </div>
-  </div>
-</section>
+  </section>
+
+</div>
 
 <section class="contact" id="contact">
-  <p class="label">Sheet 03 / 03 — Contact</p>
+  <p class="label">Sheet 05 / 05 — Contact</p>
   <h2 class="section-title">Get In Touch</h2>
   <p>I'm looking for research and internship opportunities in biomedical engineering. If you have a question or just want to say hi, my inbox is open.</p>
   <a class="btn btn-primary" href="mailto:luke.leininger@duke.edu">Say hello →</a>
 </section>
 
 <footer>
-  <span>Rev. 2026.10 · Duke University</span>
+  <span>Rev. 2026.11 · Duke University</span>
   <span>© 2026 Luke Leininger</span>
 </footer>
 

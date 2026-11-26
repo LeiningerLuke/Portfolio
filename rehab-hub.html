@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rehab Data Hub — Luke Leininger</title>
+<meta name="description" content="A shared rehab record across hospitals with per-patient recovery models, contradiction detection and record-cited AI answers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="top">
+  <a class="logo" href="index.html">LL // Index</a>
+  <a class="back" href="index.html#software">← Back to software</a>
+</nav>
+
+<header class="p-hero">
+  <p class="label">DWG. S-02 — Software build / Health data + AI</p>
+  <h1>Rehab Data Hub</h1>
+  <p class="desc">A rehab patient often passes through <b>three to five organizations</b>, and information gets lost or contradicted at every handoff. This hub lets clinicians from different hospitals upload data for shared patients. It <b>flags contradictions</b> between them, trains a <b>recovery model for each patient</b>, and answers questions using <b>only that patient's records</b>.</p>
+  <div class="spec-panel">
+    <div class="spec-cell"><div class="spec-label">Timeline</div><div class="spec-value">Fall 2026</div></div>
+    <div class="spec-cell"><div class="spec-label">Stack</div><div class="spec-value">Python, SQLite, NumPy, scikit-learn</div></div>
+    <div class="spec-cell"><div class="spec-label">AI</div><div class="spec-value">Claude, Groq or Grok, or a fully offline engine</div></div>
+    <div class="spec-cell"><div class="spec-label">Status</div><div class="spec-value">Working prototype with test suite</div></div>
+  </div>
+</header>
+
+<div class="main-image">
+  <div class="fig-frame">
+    <img src="assets/img/rehab-model.jpg" alt="Progress model tab showing recovery curves for FIM, gait speed, pain, knee flexion, 6-minute walk and timed up and go">
+    <div class="fig-caption"><span>Fig. 01 — Per-patient progress model</span><span>Demo patient, fictional data</span></div>
+  </div>
+</div>
+
+<main class="content">
+  <section class="content-section">
+    <p class="label">01 — System overview</p>
+    <h2>At a Glance</h2>
+    <div class="chain">
+      <div class="chain-step">JSON / CSV / notes</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Normalize</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Contradiction check</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Retrain model</div><div class="chain-arrow">→</div>
+      <div class="chain-step">Cited answers</div>
+    </div>
+    <div class="cap-grid">
+      <div class="cap-cell"><h3>Intake</h3><p>Accepts JSON, CSV or free-text clinical notes. Values like "Berg 41/56" or "TTWB" are pulled from notes, units are converted, and impossible values are rejected.</p></div>
+      <div class="cap-cell"><h3>Contradictions</h3><p>Compares each upload only against other clinicians' records: allergies, weight-bearing orders, DOB, and same-day measurements outside clinical tolerances.</p></div>
+      <div class="cap-cell"><h3>Recovery model</h3><p>For each metric it fits linear and log recovery curves to one patient's undisputed data, picks the better one by leave-one-out error, and forecasts when goals will be reached.</p></div>
+      <div class="cap-cell"><h3>Q&amp;A</h3><p>Every statement cites a record ID. If the answer isn't in the records, it says so. Disputed values are flagged, and other patients' data can never reach the answer.</p></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">02 — Contradictions</p>
+    <h2>Catching Handoff Errors</h2>
+    <p>The demo patient has three real-world-style conflicts: one hospital says "no known allergies" and another lists penicillin; weight-bearing is "as tolerated" in one record and "toe-touch" in another; and two knee-flexion readings disagree by 23°. Disputed records are left out of the model until a clinician keeps one or marks both valid.</p>
+    <div class="media-grid">
+      <div class="media-item"><div class="media-frame"><img src="assets/img/rehab-conflicts.jpg" alt="Contradictions tab listing weight-bearing, allergy and knee flexion conflicts" loading="lazy"></div><div class="media-caption">Fig. 02 — Open contradictions with resolve options</div></div>
+      <div class="media-item"><div class="media-frame"><img src="assets/img/rehab-overview.jpg" alt="Patient overview with clinical facts and disputed values tagged" loading="lazy"></div><div class="media-caption">Fig. 03 — Patient overview, each fact tagged with its source</div></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <p class="label">03 — Safety</p>
+    <h2>Guardrails &amp; Access</h2>
+    <ul>
+      <li><b>Care teams:</b> only a patient's team can see or add to their record. Uploads from outside the team are held until a different team member approves access.</li>
+      <li><b>Audit log:</b> every login, view, upload, question and resolution is recorded.</li>
+      <li><b>Prompt-injection defense:</b> notes that try to instruct the software are flagged before any AI model sees them, and the model is told to treat notes as data.</li>
+      <li><b>Offline mode:</b> a local engine answers questions without sending any data out.</li>
+    </ul>
+    <p>I also wrote a product assessment of the idea. The strongest angle is "rehab handoff reconciliation": catching contradictions between organizations, which few products focus on.</p>
+    <p style="font-size: 14px; color: var(--ink-2)">This is a prototype, not a certified medical system. All patients shown are fictional demo data.</p>
+    <div class="links-row">
+      <a class="btn btn-ghost" href="index.html#software">← All software</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Rev. 2026.11 · Duke University</span>
+  <span>© 2026 Luke Leininger</span>
+</footer>
+
+<dialog id="lightbox"><img alt=""><p></p><button type="button" aria-label="Close">×</button></dialog>
+<script src="script.js"></script>
+</body>
+</html>
