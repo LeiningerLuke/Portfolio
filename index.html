@@ -145,7 +145,10 @@
   <p class="label">Sheet 05 / 05 — Contact</p>
   <h2 class="section-title">Get In Touch</h2>
   <p>I'm looking for research and internship opportunities in biomedical engineering. If you have a question or just want to say hi, my inbox is open.</p>
-  <a class="btn btn-primary" href="mailto:luke.leininger@duke.edu">Say hello →</a>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="mailto:luke.leininger@duke.edu?subject=Hello%20from%20your%20portfolio">Say hello →</a>
+    <button class="btn btn-ghost" type="button" id="copy-email" data-email="luke.leininger@duke.edu">Copy email</button>
+  </div>
   <p class="contact-email">luke.leininger@duke.edu</p>
 </section>
 
@@ -154,5 +157,21 @@
   <span>© 2026 Luke Leininger</span>
 </footer>
 
+<script>
+  // Fallback for visitors with no email app: copy the address instead.
+  const copyBtn = document.getElementById('copy-email');
+  copyBtn.addEventListener('click', async () => {
+    const email = copyBtn.dataset.email;
+    try {
+      await navigator.clipboard.writeText(email);
+    } catch {
+      const t = document.createElement('textarea');
+      t.value = email; document.body.appendChild(t); t.select();
+      document.execCommand('copy'); t.remove();
+    }
+    copyBtn.textContent = 'Copied ✓';
+    setTimeout(() => { copyBtn.textContent = 'Copy email'; }, 2000);
+  });
+</script>
 </body>
 </html>
